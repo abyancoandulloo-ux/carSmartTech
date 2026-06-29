@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Car Smart Tech | Premium Automotive Components</title>
+    <link rel="icon" type="image/x-icon" href="logo.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="logo.ico">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            -webkit-tap-highlight-color: transparent;
+        }
+        .serif-title { font-family: 'Playfair Display', serif; }
+        ::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-stone-50 text-neutral-900 tracking-wide selection:bg-neutral-800 selection:text-white antialiased overflow-x-hidden">
+
+    <nav class="bg-neutral-950/95 backdrop-blur-md text-white sticky top-0 z-40 border-b border-neutral-800 safe-top">
+        <div class="container mx-auto px-4 md:px-8 py-4 flex justify-between items-center">
+            <a href="#home" class="flex items-center gap-2 md:gap-3 group">
+                <img src="logo.jpg" alt="Car Smart Tech Logo" class="h-8 w-auto object-contain transition duration-300">
+                <span class="text-sm md:text-lg font-medium tracking-[0.2em] text-stone-200 group-hover:text-amber-400 transition">CAR SMART TECH</span>
+            </a>
+            
+            <div class="flex items-center space-x-4 md:space-x-10 text-[11px] md:text-sm font-medium tracking-widest uppercase">
+                <a href="#home" class="text-stone-400 hover:text-white transition-colors duration-300">Home</a>
+                <a href="#products" class="text-stone-400 hover:text-white transition-colors duration-300">Products</a>
+                <a href="#contact" class="text-stone-400 hover:text-white transition-colors duration-300">Contact</a>
+                <button onclick="toggleCart()" class="relative p-2 text-stone-400 hover:text-white transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 md:w-6 md:h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
+                    <span id="cart-count" class="absolute top-0 right-0 bg-[#D4AF37] text-neutral-950 text-[9px] font-bold rounded-full h-4 w-4 flex items-center justify-center hidden">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <header id="home" class="relative bg-neutral-950 text-white overflow-hidden py-28 md:py-40 px-4 md:px-8 border-b border-neutral-900 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1920&q=80');">
+        <div class="absolute inset-0 bg-neutral-950/85 backdrop-blur-[2px]"></div>
+        
+        <div class="relative max-w-4xl mx-auto text-center space-y-6 md:space-y-8">
+            <span class="text-[10px] md:text-xs font-semibold tracking-[0.4em] text-[#D4AF37] uppercase block">Curated Automotive Excellence</span>
+            <h1 class="serif-title text-3xl md:text-6xl font-light tracking-wide text-stone-100 leading-tight">
+                Engineering Sophistication <br><span class="italic font-normal text-stone-400">For The Discerning Driver</span>
+            </h1>
+            <p class="text-stone-400 text-sm md:text-lg max-w-2xl mx-auto font-light leading-relaxed px-2">
+                Welcome to Car Smart Tech, directed by Zaheer Ahmud Joomun. We provide an elite collection of ultra-grade performance car parts, intelligent charging hardware, and bespoke vehicular essentials.
+            </p>
+            <div class="pt-2">
+                <a href="#products" class="inline-block border border-stone-700 hover:border-[#D4AF37] px-6 md:px-8 py-3 text-xs tracking-[0.2em] uppercase font-medium transition-all duration-500 hover:bg-white hover:text-black">
+                    Explore The Collection
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main id="products" class="container mx-auto px-4 md:px-8 py-16 md:py-24">
+        <div class="text-center max-w-xl mx-auto mb-12 md:mb-20 space-y-2">
+            <span class="text-xs font-medium tracking-[0.2em] text-neutral-400 uppercase">The Catalog</span>
+            <h2 class="serif-title text-2xl md:text-3xl font-light tracking-wide">Featured Components</h2>
+            <div class="w-12 h-[1px] bg-[#D4AF37] mx-auto mt-3"></div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12">
+            <div class="group bg-white border border-stone-200/60 overflow-hidden transition-all duration-500 hover:border-neutral-800 cursor-pointer flex flex-col justify-between" onclick="openDetails(1)">
+                <div class="overflow-hidden bg-white aspect-square flex items-center justify-center p-4">
+                    <img src="brakePads.webp" alt="Brake Pads" class="h-full w-full object-contain transition-all duration-700 ease-out group-hover:scale-105">
+                </div>
+                <div class="p-6 md:p-8 flex-grow space-y-2 border-t border-stone-100">
+                    <h3 class="font-medium text-base md:text-lg tracking-wide text-neutral-800">Ceramic Brake Pads Set</h3>
+                    <p class="text-sm font-semibold tracking-wider text-neutral-900">Rs 2,000</p>
+                    <p class="text-neutral-500 text-xs font-light leading-relaxed line-clamp-2">Premium carbon-ceramic matrix configuration optimizing low dust output and heat dissipation boundaries.</p>
+                </div>
+                <div class="p-6 md:p-8 pt-0">
+                    <button onclick="event.stopPropagation(); addToCart(1)" class="w-full bg-neutral-950 active:bg-[#D4AF37] md:hover:bg-[#D4AF37] text-white md:hover:text-neutral-950 text-xs font-medium tracking-[0.2em] uppercase py-3.5 transition-all duration-300">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="group bg-white border border-stone-200/60 overflow-hidden transition-all duration-500 hover:border-neutral-800 cursor-pointer flex flex-col justify-between" onclick="openDetails(2)">
+                <div class="overflow-hidden bg-white aspect-square flex items-center justify-center p-4">
+                    <img src="carBattery.webp" alt="Fast Charger" class="h-full w-full object-contain transition-all duration-700 ease-out group-hover:scale-105">
+                </div>
+                <div class="p-6 md:p-8 flex-grow space-y-2 border-t border-stone-100">
+                    <h3 class="font-medium text-base md:text-lg tracking-wide text-neutral-800">Smart Car Battery Charger</h3>
+                    <p class="text-sm font-semibold tracking-wider text-neutral-900">Rs 1,350</p>
+                    <p class="text-neutral-500 text-xs font-light leading-relaxed line-clamp-2">Multi-stage 12V automotive battery trickle processor built inside a heavy-duty insulated impact housing shell.</p>
+                </div>
+                <div class="p-6 md:p-8 pt-0">
+                    <button onclick="event.stopPropagation(); addToCart(2)" class="w-full bg-neutral-950 active:bg-[#D4AF37] md:hover:bg-[#D4AF37] text-white md:hover:text-neutral-950 text-xs font-medium tracking-[0.2em] uppercase py-3.5 transition-all duration-300">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="group bg-white border border-stone-200/60 overflow-hidden transition-all duration-500 hover:border-neutral-800 cursor-pointer flex flex-col justify-between" onclick="openDetails(3)">
+                <div class="overflow-hidden bg-white aspect-square flex items-center justify-center p-4">
+                    <img src="light.webp" alt="LED Headlights" class="h-full w-full object-contain transition-all duration-700 ease-out group-hover:scale-105">
+                </div>
+                <div class="p-6 md:p-8 flex-grow space-y-2 border-t border-stone-100">
+                    <h3 class="font-medium text-base md:text-lg tracking-wide text-neutral-800">Ultra-Bright LED Headlight Kit</h3>
+                    <p class="text-sm font-semibold tracking-wider text-neutral-900">Rs 2,650</p>
+                    <p class="text-neutral-500 text-xs font-light leading-relaxed line-clamp-2">High-intensity 6000K crisp luminescent beam arrays featuring an integrated micro-fan cooling architecture.</p>
+                </div>
+                <div class="p-6 md:p-8 pt-0">
+                    <button onclick="event.stopPropagation(); addToCart(3)" class="w-full bg-neutral-950 active:bg-[#D4AF37] md:hover:bg-[#D4AF37] text-white md:hover:text-neutral-950 text-xs font-medium tracking-[0.2em] uppercase py-3.5 transition-all duration-300">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="product-modal" class="fixed inset-0 bg-white z-50 transform translate-y-full transition-transform duration-300 ease-out flex flex-col hidden">
+        <div class="p-4 border-b border-stone-200 flex items-center bg-white sticky top-0 z-10 safe-top">
+            <button onclick="closeDetails()" class="text-neutral-800 p-2 text-xl active:bg-stone-100 rounded-full flex items-center justify-center">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <span class="ml-4 font-semibold text-sm tracking-wider uppercase text-neutral-800">Product Details</span>
+        </div>
+        
+        <div class="flex-grow overflow-y-auto bg-stone-100 md:bg-white">
+            <div class="max-w-5xl mx-auto flex flex-col md:flex-row">
+                <div class="w-full md:w-1/2 bg-white p-6 flex items-center justify-center border-b md:border-b-0 md:border-r border-stone-200">
+                    <img id="modal-img" src="" alt="" class="max-h-[35vh] md:max-h-[50vh] w-auto object-contain">
+                </div>
+                
+                <div class="w-full md:w-1/2 p-6 bg-white space-y-6">
+                    <div>
+                        <h3 id="modal-title" class="text-xl md:text-2xl font-bold text-neutral-900 tracking-tight"></h3>
+                        <p class="text-xs text-neutral-400 mt-1 uppercase tracking-wider">Brand Genuine Product | 100% Guaranteed</p>
+                    </div>
+                    
+                    <hr class="border-stone-200">
+                    
+                    <div class="space-y-1">
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-xs text-neutral-500 font-medium uppercase">Price:</span>
+                            <span id="modal-price" class="text-2xl font-bold text-neutral-950 tracking-tight"></span>
+                        </div>
+                        <p class="text-xs text-emerald-700 font-medium flex items-center gap-1">
+                            <i class="fa-solid fa-circle-check"></i> In Stock & Ready to Dispatch
+                        </p>
+                        <p class="text-xs text-stone-500">Pickup options available on confirmation via WhatsApp checkout network channels.</p>
+                    </div>
+
+                    <hr class="border-stone-200">
+
+                    <div class="space-y-2">
+                        <h4 class="text-xs font-bold text-neutral-800 uppercase tracking-wider">Product Overview & Specifications:</h4>
+                        <p id="modal-desc" class="text-neutral-600 text-sm font-normal leading-relaxed bg-stone-50 p-4 border border-stone-200/80 rounded"></p>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4 pt-2 text-[11px] text-neutral-500">
+                        <div class="flex items-center gap-2"><i class="fa-solid fa-shield-halved text-[#D4AF37]"></i> Verified Authenticity</div>
+                        <div class="flex items-center gap-2"><i class="fa-solid fa-truck-fast text-[#D4AF37]"></i> Quick Pickup Channels</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="p-4 border-t border-stone-200 bg-white sticky bottom-0 z-10 shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
+            <div class="max-w-md mx-auto">
+                <button id="modal-add-btn" class="w-full bg-neutral-950 active:bg-[#D4AF37] text-white text-xs font-semibold tracking-[0.2em] uppercase py-4 transition-all duration-300 rounded-none shadow-md">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="cart-menu" class="fixed inset-y-0 right-0 w-full md:w-[420px] bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-400 ease-out flex flex-col">
+        <div class="p-4 md:p-6 bg-neutral-950 text-white flex justify-between items-center border-b border-neutral-900 safe-top">
+            <h3 class="text-xs font-semibold tracking-[0.2em] uppercase text-stone-200 flex items-center gap-2">Selected Items</h3>
+            <button onclick="toggleCart()" class="w-10 h-10 flex items-center justify-center text-2xl font-light hover:text-[#D4AF37] transition">&times;</button>
+        </div>
+        
+        <div id="cart-items" class="p-6 flex-grow overflow-y-auto space-y-6">
+            <p class="text-neutral-400 text-center text-xs font-light tracking-wider py-12">The manifest is currently clear.</p>
+        </div>
+
+        <div class="p-6 border-t border-stone-200 bg-stone-50 space-y-4 pb-8">
+            <div class="flex justify-between items-baseline font-medium text-sm tracking-widest uppercase">
+                <span class="text-neutral-500">Estimated Total:</span>
+                <span id="cart-total" class="text-lg text-black font-semibold">Rs 0</span>
+            </div>
+            <button onclick="checkoutViaWhatsApp()" class="w-full bg-emerald-800 active:bg-emerald-900 text-white text-xs font-medium tracking-[0.2em] uppercase py-4 flex items-center justify-center gap-3 transition-colors duration-300 shadow-sm rounded-none">
+                <i class="fab fa-whatsapp text-base"></i> Checkout Via WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <section id="contact" class="bg-stone-900 text-stone-400 py-16 md:py-24 px-4 md:px-8 border-t border-neutral-800">
+        <div class="container mx-auto max-w-5xl">
+            <div class="text-center max-w-xl mx-auto mb-12 md:mb-16 space-y-2">
+                <span class="text-xs font-semibold tracking-[0.4em] text-[#D4AF37] uppercase block">Connect With Us</span>
+                <h2 class="serif-title text-3xl font-light tracking-wide text-white">Get in Touch</h2>
+                <div class="w-12 h-[1px] bg-[#D4AF37] mx-auto mt-3"></div>
+                <p class="text-stone-400 text-xs md:text-sm font-light leading-relaxed pt-2 max-w-md mx-auto">
+                    Have questions about specific part installations, inventory availability, or compatibility constraints? Reach out through any of our channels below for instant premium technical assistance.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
+                <a href="tel:58660270" class="group block border border-stone-800 bg-neutral-950/40 p-6 md:p-8 text-center transition-all duration-500 hover:border-stone-600 hover:bg-neutral-950/70">
+                    <div class="mb-3 text-[#D4AF37] group-hover:scale-110 transition-transform duration-300">
+                        <i class="fa-solid fa-phone-flip text-lg"></i>
+                    </div>
+                    <h3 class="text-[11px] font-semibold tracking-[0.2em] text-stone-200 uppercase mb-1">Direct Line</h3>
+                    <p class="text-xs md:text-sm font-light text-stone-400 group-hover:text-white transition-colors">58660270</p>
+                </a>
+                
+                <a href="mailto:zaheerjoomun10@gmail.com" class="group block border border-stone-800 bg-neutral-950/40 p-6 md:p-8 text-center transition-all duration-500 hover:border-stone-600 hover:bg-neutral-950/70">
+                    <div class="mb-3 text-[#D4AF37] group-hover:scale-110 transition-transform duration-300">
+                        <i class="fa-solid fa-envelope text-lg"></i>
+                    </div>
+                    <h3 class="text-[11px] font-semibold tracking-[0.2em] text-stone-200 uppercase mb-1">Inquiries</h3>
+                    <p class="text-xs md:text-sm font-light text-stone-400 group-hover:text-white transition-colors truncate">zaheerjoomun10@gmail.com</p>
+                </a>
+                
+                <a href="https://www.facebook.com/share/17PeyAGxff/" target="_blank" class="group block border border-stone-800 bg-neutral-950/40 p-6 md:p-8 text-center transition-all duration-500 hover:border-stone-600 hover:bg-neutral-950/70">
+                    <div class="mb-3 text-[#D4AF37] group-hover:scale-110 transition-transform duration-300">
+                        <i class="fa-brands fa-facebook-f text-lg"></i>
+                    </div>
+                    <h3 class="text-[11px] font-semibold tracking-[0.2em] text-stone-200 uppercase mb-1">Digital Showroom</h3>
+                    <p class="text-xs md:text-sm font-light text-stone-400 group-hover:text-white transition-colors">@CarSmartTech</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-neutral-950 text-stone-500 py-8 px-4 md:px-8 border-t border-neutral-900 pb-12 md:pb-8">
+        <div class="container mx-auto max-w-5xl flex flex-col md:flex-row justify-between items-center text-[9px] md:text-[10px] tracking-widest uppercase font-light gap-4">
+            <div class="text-center md:text-left">
+                <p class="text-stone-300 font-medium mb-1">Car Smart Tech</p>
+                <p>Proprietor: Zaheer Ahmud Joomun</p>
+            </div>
+            <div class="text-center md:text-right text-neutral-600">
+                &copy; 2026 Car Smart Tech. Engineered with absolute precision.<br class="md:hidden">
+                <a href="https://www.facebook.com/profile.php?id=61591242190352" target="_blank" class="text-stone-400 hover:text-[#D4AF37] underline transition-colors inline-block mt-1">Created by Abyan Coan Dulloo</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const products = {
+            1: { title: "Ceramic Brake Pads Set", price: 2000, desc: "High-performance carbon-ceramic matrix setup configured to supply precise stopping power, zero mechanical noise thresholds, and extreme thermal structural fatigue lifespan over extended use profiles.", img: "brakePads.webp" },
+            2: { title: "Smart Car Battery Charger", price: 1350, desc: "Intelligent micro-processor automatic battery maintaining station. Equipped with real-time diagnostic parameters, pulse maintenance cycles, and dynamic voltage threshold adaptation controls.", img: "carBattery.webp" },
+            3: { title: "Ultra-Bright LED Headlight Kit", price: 2650, desc: "Premium conversion custom upgrade headlamp solution. Generates pristine, crystal-focused visibility patterns down road grids without blinding oncoming motorist lanes.", img: "light.webp" }
+        };
+
+        let cart = [];
+
+        function openDetails(id) {
+            const product = products[id];
+            const modal = document.getElementById('product-modal');
+            
+            document.getElementById('modal-img').src = product.img;
+            document.getElementById('modal-title').innerText = product.title;
+            document.getElementById('modal-price').innerText = `Rs ${product.price.toLocaleString()}`;
+            document.getElementById('modal-desc').innerText = product.desc;
+            
+            document.getElementById('modal-add-btn').onclick = function() {
+                addToCart(id);
+                closeDetails();
+            };
+            
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; 
+            setTimeout(() => {
+                modal.classList.remove('translate-y-full');
+            }, 10);
+        }
+
+        function closeDetails() {
+            const modal = document.getElementById('product-modal');
+            modal.classList.add('translate-y-full');
+            document.body.style.overflow = '';
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function toggleCart() {
+            document.getElementById('cart-menu').classList.toggle('translate-x-full');
+        }
+
+        function addToCart(id) {
+            const product = products[id];
+            const existingItem = cart.find(item => item.id === id);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ id: id, ...product, quantity: 1 });
+            }
+            updateCartUI();
+            document.getElementById('cart-menu').classList.remove('translate-x-full');
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items');
+            const countBadge = document.getElementById('cart-count');
+            const totalDisplay = document.getElementById('cart-total');
+
+            if (cart.length === 0) {
+                container.innerHTML = '<p class="text-neutral-400 text-center text-xs font-light tracking-wider py-12">The manifest is currently clear.</p>';
+                countBadge.classList.add('hidden');
+                totalDisplay.innerText = "Rs 0";
+                return;
+            }
+
+            let itemsCount = 0;
+            let netValue = 0;
+            container.innerHTML = '';
+
+            cart.forEach(item => {
+                itemsCount += item.quantity;
+                netValue += item.price * item.quantity;
+
+                container.innerHTML += `
+                    <div class="flex items-center gap-4 border-b border-stone-100 pb-4">
+                        <img src="${item.img}" class="w-14 h-14 object-contain bg-stone-50 p-1">
+                        <div class="flex-grow space-y-0.5">
+                            <h4 class="font-medium text-xs tracking-wide text-neutral-800">${item.title}</h4>
+                            <p class="text-[11px] text-neutral-400 tracking-wider">Rs ${item.price.toLocaleString()} × ${item.quantity}</p>
+                        </div>
+                        <button onclick="removeFromCart(${item.id})" class="text-stone-400 p-2 text-lg">&times;</button>
+                    </div>
+                `;
+            });
+
+            countBadge.innerText = itemsCount;
+            countBadge.classList.remove('hidden');
+            totalDisplay.innerText = `Rs ${netValue.toLocaleString()}`;
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            updateCartUI();
+        }
+
+        function checkoutViaWhatsApp() {
+            if (cart.length === 0) return;
+            const phoneNumber = "23058660270"; 
+            let message = "Hello Zaheer, I am placing an order via Car Smart Tech:\n\n";
+            let grandTotal = 0;
+            
+            cart.forEach(item => {
+                const subtotal = item.price * item.quantity;
+                grandTotal += subtotal;
+                message += `▪️ *${item.title}* (Qty: ${item.quantity}) — Rs ${subtotal.toLocaleString()}\n`;
+            });
+
+            message += `\n*Total Order Valuation:* Rs ${grandTotal.toLocaleString()}`;
+            window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
+        }
+    </script>
+</body>
+</html>
