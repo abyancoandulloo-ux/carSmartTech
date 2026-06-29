@@ -28,61 +28,171 @@
                 <span class="text-sm md:text-lg font-medium tracking-[0.2em] text-stone-200 group-hover:text-amber-400 transition">CAR SMART TECH</span>
             </a>
             
-            <div class="flex items-center space-x-4 md:space-x-10 text-[11px] md:text-sm font-medium tracking-widest uppercase">
+            <div class="hidden md:flex items-center space-x-8 text-xs font-medium tracking-widest uppercase">
                 <a href="#home" class="text-stone-400 hover:text-white transition-colors duration-300">Home</a>
-                <a href="#products" class="text-stone-400 hover:text-white transition-colors duration-300">Products</a>
+                <a href="#car-parts" class="text-stone-400 hover:text-white transition-colors duration-300">Car Parts</a>
+                <a href="#others" class="text-stone-400 hover:text-white transition-colors duration-300">Others</a>
+                <a href="#promotion" class="text-stone-400 hover:text-white transition-colors duration-300">Promotion</a>
                 <a href="#contact" class="text-stone-400 hover:text-white transition-colors duration-300">Contact</a>
+            </div>
+
+            <div class="flex items-center space-x-2 md:space-x-4">
                 <button onclick="toggleCart()" class="relative p-2 text-stone-400 hover:text-white transition duration-300">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 md:w-6 md:h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
                     <span id="cart-count" class="absolute top-0 right-0 bg-[#D4AF37] text-neutral-950 text-[9px] font-bold rounded-full h-4 w-4 flex items-center justify-center hidden">0</span>
                 </button>
+                
+                <button onclick="toggleMobileMenu()" class="md:hidden text-stone-400 p-2 hover:text-white transition focus:outline-none">
+                    <i id="menu-icon" class="fa-solid fa-bars text-lg w-5 text-center"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden bg-neutral-950 border-t border-neutral-900 transition-all duration-300 ease-in-out">
+            <div class="px-4 py-4 flex flex-col space-y-4 text-[11px] font-medium tracking-[0.2em] uppercase">
+                <a href="#home" onclick="toggleMobileMenu()" class="text-stone-300 hover:text-white py-1">Home</a>
+                <a href="#car-parts" onclick="toggleMobileMenu()" class="text-stone-300 hover:text-white py-1">Car Parts</a>
+                <a href="#others" onclick="toggleMobileMenu()" class="text-stone-300 hover:text-white py-1">Others</a>
+                <a href="#promotion" onclick="toggleMobileMenu()" class="text-stone-300 hover:text-white py-1">Promotion</a>
+                <a href="#contact" onclick="toggleMobileMenu()" class="text-stone-300 hover:text-white py-1">Contact</a>
             </div>
         </div>
     </nav>
 
     <header id="home" class="relative bg-neutral-950 text-white overflow-hidden py-28 md:py-40 px-4 md:px-8 border-b border-neutral-900 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1920&q=80');">
-        <div class="absolute inset-0 bg-neutral-950/45 backdrop-blur-[1px]"></div>
+        <div class="absolute inset-0 bg-neutral-950/60 backdrop-blur-[2px]"></div>
         
         <div class="relative max-w-4xl mx-auto text-center space-y-6 md:space-y-8">
-            <span class="text-[10px] md:text-xs font-semibold tracking-[0.4em] text-[#D4AF37] uppercase block">Top Quality Parts & Best Prices</span>
-            <h1 class="serif-title text-3xl md:text-6xl font-light tracking-wide text-stone-100 leading-tight drop-shadow-[0_4px_6px_rgba(0,0,0,0.6)]">
-                For Car Tech & Accessories<br><span class="italic font-normal text-stone-200">Your Trusted Choice  </span>
+            <span class="text-[10px] md:text-xs font-semibold tracking-[0.4em] text-[#D4AF37] uppercase block"></span>
+            <h1 class="serif-title text-3xl md:text-6xl font-light tracking-wide text-stone-100 leading-tight">
+                  Smart Car Tech & Accessories<br><span class="italic font-normal text-stone-400">Your Trusted Choice</span>
             </h1>
-            <p class="text-stone-100 text-sm md:text-lg max-w-2xl mx-auto font-normal leading-relaxed px-2 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+            <p class="text-stone-400 text-sm md:text-lg max-w-2xl mx-auto font-light leading-relaxed px-2">
                 Welcome to Car Smart Tech, managed by Zaheer Ahmud Joomun. We bring you the best selection of high-performance car parts, smart battery chargers, and premium accessories in Mauritius to keep your vehicle running smoothly.
             </p>
             <div class="pt-2">
-                <a href="#products" class="inline-block border border-white bg-neutral-950/40 backdrop-blur-sm hover:border-[#D4AF37] px-6 md:px-8 py-3 text-xs tracking-[0.2em] uppercase font-medium transition-all duration-500 hover:bg-white hover:text-black">
+                <a href="#car-parts" class="inline-block border border-stone-700 hover:border-[#D4AF37] px-6 md:px-8 py-3 text-xs tracking-[0.2em] uppercase font-medium transition-all duration-500 hover:bg-white hover:text-black">
                     Explore The Collection
                 </a>
             </div>
         </div>
     </header>
 
-    <main id="products" class="container mx-auto px-4 md:px-8 py-16 md:py-24">
-        <div class="text-center max-w-xl mx-auto mb-6 space-y-2">
-            <span class="text-xs font-medium tracking-[0.2em] text-neutral-400 uppercase">The Catalog</span>
-            <h2 class="serif-title text-2xl md:text-3xl font-light tracking-wide">Featured Components</h2>
-            <div class="w-12 h-[1px] bg-[#D4AF37] mx-auto mt-3"></div>
-        </div>
-
-        <div class="max-w-5xl mx-auto mb-12 flex flex-col sm:flex-row gap-4 items-center justify-between border-b border-stone-200 pb-6">
-            <div class="relative w-full sm:w-72">
-                <input type="text" id="search-input" oninput="filterAndSortProducts()" placeholder="Search items..." class="w-full bg-white border border-stone-300 text-sm px-4 py-2.5 pl-10 focus:outline-none focus:border-neutral-800 transition rounded-none">
-                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-stone-400 text-xs"></i>
-            </div>
-            <div class="relative w-full sm:w-56">
-                <select id="sort-select" onchange="filterAndSortProducts()" class="w-full bg-white border border-stone-300 text-sm px-4 py-2.5 pr-10 focus:outline-none focus:border-neutral-800 transition appearance-none cursor-pointer rounded-none">
-                    <option value="default">Default Sorting</option>
-                    <option value="asc">Price: Low to High</option>
-                    <option value="desc">Price: High to Low</option>
-                </select>
-                <i class="fa-solid fa-chevron-down absolute right-4 top-4 text-stone-400 text-xs pointer-events-none"></i>
-            </div>
-        </div>
+    <main class="container mx-auto px-4 md:px-8 py-12 md:py-20">
         
-        <div id="product-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12">
+        <section id="car-parts" class="mb-20 scroll-mt-24">
+            <div class="max-w-xl mb-8 space-y-1">
+                <span class="text-xs font-medium tracking-[0.2em] text-[#D4AF37] uppercase">Premium Catalogue</span>
+                <h2 class="serif-title text-2xl md:text-3xl font-light tracking-wide">Automotive Car Parts</h2>
+                <div class="w-12 h-[1px] bg-neutral-800 mt-2"></div>
             </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12">
+                <div class="group bg-white border border-stone-200/60 overflow-hidden transition-all duration-500 hover:border-neutral-800 cursor-pointer flex flex-col justify-between" onclick="openDetails(1)">
+                    <div class="overflow-hidden bg-white aspect-square flex items-center justify-center p-4">
+                        <img src="brakePads.webp" alt="Brake Pads" class="h-full w-full object-contain transition-all duration-700 ease-out group-hover:scale-105">
+                    </div>
+                    <div class="p-6 md:p-8 flex-grow space-y-2 border-t border-stone-100">
+                        <h3 class="font-medium text-base md:text-lg tracking-wide text-neutral-800">Ceramic Brake Pads Set</h3>
+                        <p class="text-sm font-semibold tracking-wider text-neutral-900">Rs 2,000</p>
+                        <p class="text-neutral-500 text-xs font-light leading-relaxed line-clamp-2">Premium carbon-ceramic matrix configuration optimizing low dust output and heat dissipation boundaries.</p>
+                    </div>
+                    <div class="p-6 md:p-8 pt-0">
+                        <button onclick="event.stopPropagation(); addToCart(1)" class="w-full bg-neutral-950 active:bg-[#D4AF37] md:hover:bg-[#D4AF37] text-white md:hover:text-neutral-950 text-xs font-medium tracking-[0.2em] uppercase py-3.5 transition-all duration-300">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="group bg-white border border-stone-200/60 overflow-hidden transition-all duration-500 hover:border-neutral-800 cursor-pointer flex flex-col justify-between" onclick="openDetails(2)">
+                    <div class="overflow-hidden bg-white aspect-square flex items-center justify-center p-4">
+                        <img src="carBattery.webp" alt="Fast Charger" class="h-full w-full object-contain transition-all duration-700 ease-out group-hover:scale-105">
+                    </div>
+                    <div class="p-6 md:p-8 flex-grow space-y-2 border-t border-stone-100">
+                        <h3 class="font-medium text-base md:text-lg tracking-wide text-neutral-800">Smart Car Battery Charger</h3>
+                        <p class="text-sm font-semibold tracking-wider text-neutral-900">Rs 1,350</p>
+                        <p class="text-neutral-500 text-xs font-light leading-relaxed line-clamp-2">Multi-stage 12V automotive battery trickle processor built inside a heavy-duty insulated impact housing shell.</p>
+                    </div>
+                    <div class="p-6 md:p-8 pt-0">
+                        <button onclick="event.stopPropagation(); addToCart(2)" class="w-full bg-neutral-950 active:bg-[#D4AF37] md:hover:bg-[#D4AF37] text-white md:hover:text-neutral-950 text-xs font-medium tracking-[0.2em] uppercase py-3.5 transition-all duration-300">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="group bg-white border border-stone-200/60 overflow-hidden transition-all duration-500 hover:border-neutral-800 cursor-pointer flex flex-col justify-between" onclick="openDetails(3)">
+                    <div class="overflow-hidden bg-white aspect-square flex items-center justify-center p-4">
+                        <img src="light.webp" alt="LED Headlights" class="h-full w-full object-contain transition-all duration-700 ease-out group-hover:scale-105">
+                    </div>
+                    <div class="p-6 md:p-8 flex-grow space-y-2 border-t border-stone-100">
+                        <h3 class="font-medium text-base md:text-lg tracking-wide text-neutral-800">Ultra-Bright LED Headlight Kit</h3>
+                        <p class="text-sm font-semibold tracking-wider text-neutral-900">Rs 2,650</p>
+                        <p class="text-neutral-500 text-xs font-light leading-relaxed line-clamp-2">High-intensity 6000K crisp luminescent beam arrays featuring an integrated micro-fan cooling architecture.</p>
+                    </div>
+                    <div class="p-6 md:p-8 pt-0">
+                        <button onclick="event.stopPropagation(); addToCart(3)" class="w-full bg-neutral-950 active:bg-[#D4AF37] md:hover:bg-[#D4AF37] text-white md:hover:text-neutral-950 text-xs font-medium tracking-[0.2em] uppercase py-3.5 transition-all duration-300">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="others" class="mb-20 scroll-mt-24">
+            <div class="max-w-xl mb-8 space-y-1">
+                <span class="text-xs font-medium tracking-[0.2em] text-[#D4AF37] uppercase">Home & Lifestyle Specialties</span>
+                <h2 class="serif-title text-2xl md:text-3xl font-light tracking-wide">Others Accessories</h2>
+                <div class="w-12 h-[1px] bg-neutral-800 mt-2"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12">
+                <div class="group bg-white border border-stone-200/60 overflow-hidden transition-all duration-500 hover:border-neutral-800 cursor-pointer flex flex-col justify-between" onclick="openDetails(4)">
+                    <div class="overflow-hidden bg-white aspect-square flex items-center justify-center p-4">
+                        <img src="bin.webp" alt="Premium Smart Bin" class="h-full w-full object-contain transition-all duration-700 ease-out group-hover:scale-105">
+                    </div>
+                    <div class="p-6 md:p-8 flex-grow space-y-2 border-t border-stone-100">
+                        <h3 class="font-medium text-base md:text-lg tracking-wide text-neutral-800">Premium Motion Sensor Bin</h3>
+                        <p class="text-sm font-semibold tracking-wider text-neutral-900">Rs 1,850</p>
+                        <p class="text-neutral-500 text-xs font-light leading-relaxed line-clamp-2">Touchless sensor-activated luxury waste bin constructed from fingerprint-resistant stainless steel composite layers.</p>
+                    </div>
+                    <div class="p-6 md:p-8 pt-0">
+                        <button onclick="event.stopPropagation(); addToCart(4)" class="w-full bg-neutral-950 active:bg-[#D4AF37] md:hover:bg-[#D4AF37] text-white md:hover:text-neutral-950 text-xs font-medium tracking-[0.2em] uppercase py-3.5 transition-all duration-300">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="group bg-white border border-stone-200/60 overflow-hidden transition-all duration-500 hover:border-neutral-800 cursor-pointer flex flex-col justify-between" onclick="openDetails(5)">
+                    <div class="overflow-hidden bg-white aspect-square flex items-center justify-center p-4">
+                        <img src="bathroom.jpg" alt="Luxury Bathroom Solutions" class="h-full w-full object-contain transition-all duration-700 ease-out group-hover:scale-105">
+                    </div>
+                    <div class="p-6 md:p-8 flex-grow space-y-2 border-t border-stone-100">
+                        <h3 class="font-medium text-base md:text-lg tracking-wide text-neutral-800">Luxury Bathroom Organization Set</h3>
+                        <p class="text-sm font-semibold tracking-wider text-neutral-900">Rs 2,200</p>
+                        <p class="text-neutral-500 text-xs font-light leading-relaxed line-clamp-2">Finely detailed premium organizational fixtures engineered for sleek modern damp environments.</p>
+                    </div>
+                    <div class="p-6 md:p-8 pt-0">
+                        <button onclick="event.stopPropagation(); addToCart(5)" class="w-full bg-neutral-950 active:bg-[#D4AF37] md:hover:bg-[#D4AF37] text-white md:hover:text-neutral-950 text-xs font-medium tracking-[0.2em] uppercase py-3.5 transition-all duration-300">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="promotion" class="scroll-mt-24 pt-4">
+            <div class="max-w-xl mb-8 space-y-1">
+                <span class="text-xs font-medium tracking-[0.2em] text-[#D4AF37] uppercase">Exclusive Event</span>
+                <h2 class="serif-title text-2xl md:text-3xl font-light tracking-wide">Seasonal Campaigns</h2>
+                <div class="w-12 h-[1px] bg-neutral-800 mt-2"></div>
+            </div>
+
+            <div class="group bg-neutral-950 text-white border border-stone-900 overflow-hidden transition-all duration-500 hover:border-[#D4AF37] cursor-pointer flex flex-col md:flex-row justify-between items-center" onclick="openDetails(6)">
+                <div class="w-full md:w-1/2 overflow-hidden bg-neutral-900 aspect-video md:aspect-[4/3] flex items-center justify-center p-6">
+                    <img src="carVaccum.jpg" alt="High-Power Car Vacuum Cleaner" class="h-full w-full object-cover transition-all duration-700 ease-out group-hover:scale-102">
+                </div>
+                <div class="w-full md:w-1/2 p-8 md:p-12 space-y-4">
+                    <span class="text-[10px] font-bold tracking-[0.3em] text-[#D4AF37] uppercase block">Special Limited Offer</span>
+                    <h3 class="serif-title text-xl md:text-2xl font-light tracking-wide text-stone-100">Elite Smart Tech Bundle Promotion</h3>
+                    <p class="text-sm font-semibold tracking-wider text-amber-400">Special Price Options Available</p>
+                    <p class="text-stone-400 text-xs font-light leading-relaxed">Unlock unprecedented combined rates on limited-edition product configurations featuring our deep cleaning high-power vacuum solutions. Inquire directly via our streamlined WhatsApp checkout channels to confirm allocations.</p>
+                    <div class="pt-2">
+                        <button class="border border-stone-700 group-hover:border-[#D4AF37] px-6 py-2.5 text-[10px] tracking-[0.2em] uppercase font-medium transition-all duration-300 bg-white text-black group-hover:bg-[#D4AF37] group-hover:text-black">View Bundle Details</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <div id="product-modal" class="fixed inset-0 bg-white z-50 transform translate-y-full transition-transform duration-300 ease-out flex flex-col hidden">
@@ -143,7 +253,7 @@
     <div id="cart-menu" class="fixed inset-y-0 right-0 w-full md:w-[420px] bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-400 ease-out flex flex-col">
         <div class="p-4 md:p-6 bg-neutral-950 text-white flex justify-between items-center border-b border-neutral-900 safe-top">
             <h3 class="text-xs font-semibold tracking-[0.2em] uppercase text-stone-200 flex items-center gap-2">Selected Items</h3>
-            <button onclick="toggleCart()" class="w-10 h-10 flex items-center justify-center text-2xl font-light hover:text-[#D4AF37] transition">×</button>
+            <button onclick="toggleCart()" class="w-10 h-10 flex items-center justify-center text-2xl font-light hover:text-[#D4AF37] transition">&times;</button>
         </div>
         
         <div id="cart-items" class="p-6 flex-grow overflow-y-auto space-y-6">
@@ -197,10 +307,6 @@
                     <p class="text-xs md:text-sm font-light text-stone-400 group-hover:text-white transition-colors">@CarSmartTech</p>
                 </a>
             </div>
-
-            <div class="mt-12 border border-stone-800 overflow-hidden shadow-2xl">
-                <iframe src="https://maps.google.com/maps?q=Port%20Louis,%20Mauritius&t=&z=14&ie=UTF8&iwloc=&output=embed" class="w-full h-80 border-0" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            </div>
         </div>
     </section>
 
@@ -211,7 +317,7 @@
                 <p>Proprietor: Zaheer Ahmud Joomun</p>
             </div>
             <div class="text-center md:text-right text-neutral-600">
-                © 2026 Car Smart Tech. Engineered with absolute precision.<br class="md:hidden">
+                &copy; 2026 Car Smart Tech. Engineered with absolute precision.<br class="md:hidden">
                 <a href="https://www.facebook.com/profile.php?id=61591242190352" target="_blank" class="text-stone-400 hover:text-[#D4AF37] underline transition-colors inline-block mt-1">Created by Abyan Coan Dulloo</a>
             </div>
         </div>
@@ -221,60 +327,27 @@
         const products = {
             1: { title: "Ceramic Brake Pads Set", price: 2000, desc: "High-performance carbon-ceramic matrix setup configured to supply precise stopping power, zero mechanical noise thresholds, and extreme thermal structural fatigue lifespan over extended use profiles.", img: "brakePads.webp" },
             2: { title: "Smart Car Battery Charger", price: 1350, desc: "Intelligent micro-processor automatic battery maintaining station. Equipped with real-time diagnostic parameters, pulse maintenance cycles, and dynamic voltage threshold adaptation controls.", img: "carBattery.webp" },
-            3: { title: "Ultra-Bright LED Headlight Kit", price: 2650, desc: "Premium conversion custom upgrade headlamp solution. Generates pristine, crystal-focused visibility patterns down road grids without blinding oncoming motorist lanes.", img: "light.webp" }
+            3: { title: "Ultra-Bright LED Headlight Kit", price: 2650, desc: "Premium conversion custom upgrade headlamp solution. Generates pristine, crystal-focused visibility patterns down road grids without blinding oncoming motorist lanes.", img: "light.webp" },
+            4: { title: "Premium Motion Sensor Bin", price: 1850, desc: "Touchless sensor-activated luxury waste handling container. Features fingerprint-proof high-grade steel sheets and an ultra-silent mechanical closing mechanism.", img: "bin.webp" },
+            5: { title: "Luxury Bathroom Organization Set", price: 2200, desc: "Elite anti-corrosive structural organizers designed to streamline aesthetics and functional utility boundaries seamlessly across contemporary luxury restroom profiles.", img: "bathroom.jpg" },
+            6: { title: "Elite Smart Tech Promo Bundle", price: 1000, desc: "Special package promotional discount allocation event. Custom tailored rates vary depending on curated choices. Contact Management directly to configure final pricing sheets.", img: "carVaccum.jpg" }
         };
 
         let cart = [];
 
-        function renderProducts(itemsToRender) {
-            const grid = document.getElementById('product-grid');
-            grid.innerHTML = '';
-
-            if (itemsToRender.length === 0) {
-                grid.innerHTML = '<div class="col-span-full text-center py-12 text-stone-400 text-sm font-light tracking-wide">No products match your search.</div>';
-                return;
-            }
-
-            itemsToRender.forEach(product => {
-                grid.innerHTML += `
-                    <div class="group bg-white border border-stone-200/60 overflow-hidden transition-all duration-500 hover:border-neutral-800 cursor-pointer flex flex-col justify-between" onclick="openDetails(${product.id})">
-                        <div class="overflow-hidden bg-white aspect-square flex items-center justify-center p-4">
-                            <img src="${product.img}" alt="${product.title}" class="h-full w-full object-contain transition-all duration-700 ease-out group-hover:scale-105">
-                        </div>
-                        <div class="p-6 md:p-8 flex-grow space-y-2 border-t border-stone-100">
-                            <h3 class="font-medium text-base md:text-lg tracking-wide text-neutral-800">${product.title}</h3>
-                            <p class="text-sm font-semibold tracking-wider text-neutral-900">Rs ${product.price.toLocaleString()}</p>
-                            <p class="text-neutral-500 text-xs font-light leading-relaxed line-clamp-2">${product.desc}</p>
-                        </div>
-                        <div class="p-6 md:p-8 pt-0">
-                            <button onclick="event.stopPropagation(); addToCart(${product.id})" class="w-full bg-neutral-950 active:bg-[#D4AF37] md:hover:bg-[#D4AF37] text-white md:hover:text-neutral-950 text-xs font-medium tracking-[0.2em] uppercase py-3.5 transition-all duration-300">Add to Cart</button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function filterAndSortProducts() {
-            const searchValue = document.getElementById('search-input').value.toLowerCase();
-            const sortValue = document.getElementById('sort-select').value;
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('menu-icon');
             
-            let filteredList = Object.keys(products).map(key => ({
-                id: parseInt(key),
-                ...products[key]
-            }));
-
-            filteredList = filteredList.filter(item => 
-                item.title.toLowerCase().includes(searchValue) || 
-                item.desc.toLowerCase().includes(searchValue)
-            );
-
-            if (sortValue === 'asc') {
-                filteredList.sort((a, b) => a.price - b.price);
-            } else if (sortValue === 'desc') {
-                filteredList.sort((a, b) => b.price - a.price);
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                menu.classList.add('hidden');
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
             }
-
-            renderProducts(filteredList);
         }
 
         function openDetails(id) {
@@ -283,7 +356,13 @@
             
             document.getElementById('modal-img').src = product.img;
             document.getElementById('modal-title').innerText = product.title;
-            document.getElementById('modal-price').innerText = `Rs ${product.price.toLocaleString()}`;
+            
+            if (product.price === 0) {
+                document.getElementById('modal-price').innerText = "Inquire via WhatsApp";
+            } else {
+                document.getElementById('modal-price').innerText = `Rs ${product.price.toLocaleString()}`;
+            }
+            
             document.getElementById('modal-desc').innerText = product.desc;
             
             document.getElementById('modal-add-btn').onclick = function() {
@@ -343,14 +422,16 @@
                 itemsCount += item.quantity;
                 netValue += item.price * item.quantity;
 
+                const priceString = item.price === 0 ? "Promo Quote" : `Rs ${item.price.toLocaleString()}`;
+
                 container.innerHTML += `
                     <div class="flex items-center gap-4 border-b border-stone-100 pb-4">
                         <img src="${item.img}" class="w-14 h-14 object-contain bg-stone-50 p-1">
                         <div class="flex-grow space-y-0.5">
                             <h4 class="font-medium text-xs tracking-wide text-neutral-800">${item.title}</h4>
-                            <p class="text-[11px] text-neutral-400 tracking-wider">Rs ${item.price.toLocaleString()} × ${item.quantity}</p>
+                            <p class="text-[11px] text-neutral-400 tracking-wider">${priceString} × ${item.quantity}</p>
                         </div>
-                        <button onclick="removeFromCart(${item.id})" class="text-stone-400 p-2 text-lg">×</button>
+                        <button onclick="removeFromCart(${item.id})" class="text-stone-400 p-2 text-lg">&times;</button>
                     </div>
                 `;
             });
@@ -374,16 +455,17 @@
             cart.forEach(item => {
                 const subtotal = item.price * item.quantity;
                 grandTotal += subtotal;
-                message += `▪️ *${item.title}* (Qty: ${item.quantity}) — Rs ${subtotal.toLocaleString()}\n`;
+                const linePrice = item.price === 0 ? "Inquire Price" : `Rs ${subtotal.toLocaleString()}`;
+                message += `▪️ *${item.title}* (Qty: ${item.quantity}) — ${linePrice}\n`;
             });
 
-            message += `\n*Total Order Valuation:* Rs ${grandTotal.toLocaleString()}`;
+            if(grandTotal > 0){
+                message += `\n*Total Estimated Order Valuation:* Rs ${grandTotal.toLocaleString()}`;
+            } else {
+                message += `\n*Total Order Valuation:* Pending Promo Quote Selection`;
+            }
             window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
         }
-
-        window.onload = function() {
-            filterAndSortProducts();
-        };
     </script>
 </body>
 </html>
