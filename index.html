@@ -15,6 +15,17 @@
         body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         .serif-title { font-family: 'Playfair Display', serif; }
         ::-webkit-scrollbar { display: none; }
+        .promo-card {
+            background: #0a0a0a;
+            border-color: #1a1a1a;
+            transition: border-color 0.3s;
+        }
+        .promo-card:hover {
+            border-color: #d4af37;
+        }
+        .promo-card .text-muted {
+            color: #9ca3af;
+        }
     </style>
 </head>
 <body class="bg-stone-50 text-neutral-900 tracking-wide selection:bg-neutral-800 selection:text-white antialiased overflow-x-hidden">
@@ -86,9 +97,7 @@
                 <h2 class="serif-title text-2xl md:text-3xl font-light tracking-wide">Automotive Car Parts</h2>
                 <div class="w-12 h-[1px] bg-neutral-800 mt-2"></div>
             </div>
-            <div id="car-parts-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12">
-                <!-- Rendered by JavaScript -->
-            </div>
+            <div id="car-parts-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12"></div>
         </section>
 
         <!-- ====== OTHERS ====== -->
@@ -98,19 +107,17 @@
                 <h2 class="serif-title text-2xl md:text-3xl font-light tracking-wide">Others Accessories</h2>
                 <div class="w-12 h-[1px] bg-neutral-800 mt-2"></div>
             </div>
-            <div id="others-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12">
-                <!-- Rendered by JavaScript -->
-            </div>
+            <div id="others-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12"></div>
         </section>
 
         <!-- ====== PROMOTION ====== -->
-        <section id="promotion" class="scroll-mt-24 pt-4">
+        <section id="promotion" class="scroll-mt-24 pt-4 mb-20">
             <div class="max-w-xl mb-8 space-y-1">
                 <span class="text-xs font-medium tracking-[0.2em] text-[#D4AF37] uppercase">Exclusive Event</span>
                 <h2 class="serif-title text-2xl md:text-3xl font-light tracking-wide">Seasonal Campaigns</h2>
                 <div class="w-12 h-[1px] bg-neutral-800 mt-2"></div>
             </div>
-            <div id="promotion-container">
+            <div id="promotion-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12">
                 <!-- Rendered by JavaScript -->
             </div>
         </section>
@@ -138,9 +145,10 @@
                     </div>
                     <hr class="border-stone-200" />
                     <div class="space-y-1">
-                        <div class="flex items-baseline gap-2">
+                        <div class="flex items-baseline gap-3">
                             <span class="text-xs text-neutral-500 font-medium uppercase">Price:</span>
                             <span id="modal-price" class="text-2xl font-bold text-neutral-950 tracking-tight"></span>
+                            <span id="modal-old-price" class="text-sm text-neutral-400 line-through"></span>
                         </div>
                         <p id="modal-stock" class="text-xs font-medium flex items-center gap-1"></p>
                         <p class="text-xs text-stone-500">Pickup options available on confirmation via WhatsApp checkout network channels.</p>
@@ -242,11 +250,11 @@
     </footer>
 
     <!-- ================================================================ -->
-    <!-- ====== JAVASCRIPT – CORRECTED (no duplicate supabase) ====== -->
+    <!-- ====== JAVASCRIPT – UPDATED ==================================== -->
     <!-- ================================================================ -->
     <script>
         // --------------------------------------------------------------
-        // 1. SUPABASE INIT (unique variable name)
+        // 1. SUPABASE INIT
         // --------------------------------------------------------------
         const SUPABASE_URL = 'https://zjfqatxxksjwxfptxouq.supabase.co';
         const SUPABASE_ANON_KEY =
@@ -265,12 +273,13 @@
         // --------------------------------------------------------------
         const carPartsGrid = document.getElementById('car-parts-grid');
         const othersGrid = document.getElementById('others-grid');
-        const promoContainer = document.getElementById('promotion-container');
+        const promotionGrid = document.getElementById('promotion-grid');
 
         const modal = document.getElementById('product-modal');
         const modalImg = document.getElementById('modal-img');
         const modalTitle = document.getElementById('modal-title');
         const modalPrice = document.getElementById('modal-price');
+        const modalOldPrice = document.getElementById('modal-old-price');
         const modalStock = document.getElementById('modal-stock');
         const modalDesc = document.getElementById('modal-desc');
         const modalAddBtn = document.getElementById('modal-add-btn');
@@ -280,12 +289,12 @@
         const cartCount = document.getElementById('cart-count');
 
         // --------------------------------------------------------------
-        // 4. FETCH PRODUCTS FROM SUPABASE (table: smarttech)
+        // 4. FETCH PRODUCTS
         // --------------------------------------------------------------
         async function fetchProducts() {
             try {
                 const { data, error } = await supabaseClient
-                    .from('smarttech')   // ✅ table name is 'smarttech'
+                    .from('smarttech')
                     .select('*')
                     .order('created_at', { ascending: true });
 
@@ -316,7 +325,7 @@
                     `<p class="col-span-full text-center text-stone-400 text-sm py-8">No car parts available at the moment.</p>`;
                 return;
             }
-            carPartsGrid.innerHTML = items.map(p => productCardHTML(p)).join('');
+            carPartsGrid.innerHTML = items.map(p => productCardHTML(p, false)).join('');
         }
 
         function renderOthers() {
@@ -326,63 +335,48 @@
                     `<p class="col-span-full text-center text-stone-400 text-sm py-8">No other accessories available at the moment.</p>`;
                 return;
             }
-            othersGrid.innerHTML = items.map(p => productCardHTML(p)).join('');
+            othersGrid.innerHTML = items.map(p => productCardHTML(p, false)).join('');
         }
 
         function renderPromotion() {
             const items = products.filter(p => p.category === 'promotion');
             if (!items.length) {
-                promoContainer.innerHTML =
-                    `<p class="text-center text-stone-400 text-sm py-8">No active promotions right now. Check back soon!</p>`;
+                promotionGrid.innerHTML =
+                    `<p class="col-span-full text-center text-stone-400 text-sm py-8">No active promotions right now. Check back soon!</p>`;
                 return;
             }
-            const p = items[0];
-            const priceDisplay = (p.price === 0 || p.price === null) ? 'Special Price Options Available' :
-                `Rs ${p.price.toLocaleString()}`;
-            const inStockText = p.in_stock ? 'In Stock' : 'Out of Stock';
-            const stockColor = p.in_stock ? 'text-emerald-400' : 'text-red-400';
-
-            promoContainer.innerHTML = `
-                <div class="group bg-neutral-950 text-white border border-stone-900 overflow-hidden transition-all duration-500 hover:border-[#D4AF37] cursor-pointer flex flex-col md:flex-row justify-between items-center" onclick="openDetails('${p.id}')">
-                    <div class="w-full md:w-1/2 overflow-hidden bg-neutral-900 aspect-video md:aspect-[4/3] flex items-center justify-center p-6">
-                        <img src="${p.image_url}" alt="${p.name}" class="h-full w-full object-cover transition-all duration-700 ease-out group-hover:scale-102" />
-                    </div>
-                    <div class="w-full md:w-1/2 p-8 md:p-12 space-y-4">
-                        <span class="text-[10px] font-bold tracking-[0.3em] text-[#D4AF37] uppercase block">Special Limited Offer</span>
-                        <h3 class="serif-title text-xl md:text-2xl font-light tracking-wide text-stone-100">${p.name}</h3>
-                        <p class="text-sm font-semibold tracking-wider text-amber-400">${priceDisplay}</p>
-                        <p class="text-stone-400 text-xs font-light leading-relaxed">${p.description}</p>
-                        <div class="flex items-center gap-3 text-xs">
-                            <span class="${stockColor} font-medium flex items-center gap-1">
-                                <i class="fa-solid fa-circle text-[6px]"></i> ${inStockText}
-                            </span>
-                        </div>
-                        <div class="pt-2">
-                            <button class="border border-stone-700 group-hover:border-[#D4AF37] px-6 py-2.5 text-[10px] tracking-[0.2em] uppercase font-medium transition-all duration-300 bg-white text-black group-hover:bg-[#D4AF37] group-hover:text-black" onclick="event.stopPropagation(); openDetails('${p.id}')">
-                                View Bundle Details
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
+            // Use promo style (black background)
+            promotionGrid.innerHTML = items.map(p => productCardHTML(p, true)).join('');
         }
 
-        function productCardHTML(p) {
-            const priceDisplay = (p.price === 0 || p.price === null) ? 'Inquire via WhatsApp' : `Rs ${p.price.toLocaleString()}`;
+        function productCardHTML(p, isPromo) {
+            const priceDisplay = (p.price === 0 || p.price === null) ? 'Inquire' : `Rs ${p.price.toLocaleString()}`;
+            const oldPriceDisplay = (p.old_price && p.old_price > 0) ? `Rs ${p.old_price.toLocaleString()}` : '';
             const inStockText = p.in_stock ? 'In Stock' : 'Out of Stock';
             const stockColor = p.in_stock ? 'text-emerald-600' : 'text-red-500';
+            const stockColorPromo = p.in_stock ? 'text-emerald-400' : 'text-red-400';
+
+            // Card styling
+            const cardBg = isPromo ? 'bg-neutral-950 border-stone-800 text-white promo-card' : 'bg-white border-stone-200/60 text-neutral-900';
+            const hoverBorder = isPromo ? 'hover:border-[#D4AF37]' : 'hover:border-neutral-800';
+            const textMuted = isPromo ? 'text-stone-400' : 'text-neutral-500';
+            const priceColor = isPromo ? 'text-amber-400' : 'text-neutral-900';
+            const stockColorFinal = isPromo ? stockColorPromo : stockColor;
 
             return `
-                <div class="group bg-white border border-stone-200/60 overflow-hidden transition-all duration-500 hover:border-neutral-800 cursor-pointer flex flex-col justify-between" onclick="openDetails('${p.id}')">
+                <div class="group ${cardBg} border overflow-hidden transition-all duration-500 ${hoverBorder} cursor-pointer flex flex-col justify-between" onclick="openDetails('${p.id}')">
                     <div class="overflow-hidden bg-white aspect-square flex items-center justify-center p-4">
                         <img src="${p.image_url}" alt="${p.name}" class="h-full w-full object-contain transition-all duration-700 ease-out group-hover:scale-105" />
                     </div>
                     <div class="p-6 md:p-8 flex-grow space-y-2 border-t border-stone-100">
-                        <h3 class="font-medium text-base md:text-lg tracking-wide text-neutral-800">${p.name}</h3>
-                        <p class="text-sm font-semibold tracking-wider text-neutral-900">${priceDisplay}</p>
-                        <p class="text-neutral-500 text-xs font-light leading-relaxed line-clamp-2">${p.description}</p>
+                        <h3 class="font-medium text-base md:text-lg tracking-wide ${isPromo ? 'text-white' : 'text-neutral-800'}">${p.name}</h3>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="text-sm font-semibold tracking-wider ${priceColor}">${priceDisplay}</span>
+                            ${oldPriceDisplay ? `<span class="text-sm ${isPromo ? 'text-stone-500' : 'text-neutral-400'} line-through">${oldPriceDisplay}</span>` : ''}
+                        </div>
+                        <p class="${textMuted} text-xs font-light leading-relaxed line-clamp-2">${p.description}</p>
                         <div class="flex items-center gap-2 text-[10px] font-medium">
-                            <span class="${stockColor} flex items-center gap-1">
+                            <span class="${stockColorFinal} flex items-center gap-1">
                                 <i class="fa-solid fa-circle text-[5px]"></i> ${inStockText}
                             </span>
                         </div>
@@ -412,6 +406,14 @@
 
             const priceDisplay = (p.price === 0 || p.price === null) ? 'Inquire via WhatsApp' : `Rs ${p.price.toLocaleString()}`;
             modalPrice.innerText = priceDisplay;
+
+            // Old price
+            if (p.old_price && p.old_price > 0) {
+                modalOldPrice.innerText = `Rs ${p.old_price.toLocaleString()}`;
+                modalOldPrice.style.display = 'inline';
+            } else {
+                modalOldPrice.style.display = 'none';
+            }
 
             const stockText = p.in_stock ? '✅ In Stock & Ready to Dispatch' : '❌ Out of Stock';
             const stockColor = p.in_stock ? 'text-emerald-700' : 'text-red-600';
