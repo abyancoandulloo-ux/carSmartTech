@@ -17,6 +17,7 @@
 <body>
 
     <div class="min-h-screen bg-stone-50">
+        <!-- Navbar -->
         <nav class="bg-neutral-950 text-white sticky top-0 z-50 border-b border-neutral-800">
             <div class="container mx-auto px-4 md:px-8 py-4 flex justify-between items-center">
                 <div class="flex items-center gap-3">
@@ -30,10 +31,13 @@
         </nav>
 
         <div class="container mx-auto px-4 md:px-8 py-8">
+
+            <!-- Add/Edit Form -->
             <div class="bg-white border border-stone-200 p-6 md:p-8 mb-10 shadow-sm">
                 <h3 id="form-title" class="serif-title text-xl font-light text-neutral-800 mb-6">Add New Product</h3>
                 <form id="product-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <input type="hidden" id="edit-id" value="" />
+
                     <div class="space-y-1">
                         <label class="text-[10px] font-medium uppercase tracking-wider text-stone-500">Product Name *</label>
                         <input type="text" id="p-name" required class="w-full border border-stone-200 px-4 py-2.5 text-sm focus:border-neutral-800 focus:outline-none transition" />
@@ -70,6 +74,7 @@
                             <img id="image-preview" src="" alt="Preview" class="h-20 w-20 object-contain border border-stone-200 p-1" />
                         </div>
                     </div>
+
                     <div class="md:col-span-2 flex items-center gap-4 pt-2 border-t border-stone-100">
                         <button type="submit" class="bg-neutral-950 hover:bg-[#d4af37] text-white hover:text-black text-xs font-medium tracking-[0.2em] uppercase px-8 py-3 transition duration-300">
                             <i class="fa-solid fa-save mr-2"></i> Save Product
@@ -81,6 +86,7 @@
                 </form>
             </div>
 
+            <!-- Product List -->
             <div>
                 <h3 class="serif-title text-xl font-light text-neutral-800 mb-4">Manage Inventory</h3>
                 <div class="bg-white border border-stone-200 overflow-x-auto shadow-sm">
@@ -95,23 +101,31 @@
                                 <th class="px-4 py-3 text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="product-table-body" class="divide-y divide-stone-100"></tbody>
+                        <tbody id="product-table-body" class="divide-y divide-stone-100">
+                            <!-- Rendered by JavaScript -->
+                        </tbody>
                     </table>
                 </div>
             </div>
+
         </div>
     </div>
 
-    <!-- ====================== ONE SCRIPT ====================== -->
+    <!-- ====================== ONE SCRIPT BLOCK ====================== -->
     <script>
-        // Supabase config
+        // ----------------------------------------------------------------
+        // 1. SUPABASE CLIENT (unique variable name)
+        // ----------------------------------------------------------------
         const SUPABASE_URL = 'https://zjfqatxxksjwxfptxouq.supabase.co';
         const SUPABASE_ANON_KEY =
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpqZnFhdHh4a3Nqd3hmcHR4b3VxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5MDY4OTAsImV4cCI6MjA5NjQ4Mjg5MH0.RNuMP2XDBi1N3fz2NiEKgtf-ngC-52OHAiBH9B8umpU';
 
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Create client with a unique name to avoid conflicts
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // DOM refs
+        // ----------------------------------------------------------------
+        // 2. DOM REFS
+        // ----------------------------------------------------------------
         const tableBody = document.getElementById('product-table-body');
         const productForm = document.getElementById('product-form');
         const formTitle = document.getElementById('form-title');
@@ -128,10 +142,12 @@
 
         let existingImageUrl = '';
 
-        // Load products
+        // ----------------------------------------------------------------
+        // 3. LOAD PRODUCTS (table name is 'smarttech')
+        // ----------------------------------------------------------------
         async function loadProducts() {
-            const { data, error } = await supabase
-                .from('smarttech')   // ✅ lower case table name
+            const { data, error } = await supabaseClient
+                .from('smarttech')
                 .select('*')
                 .order('created_at', { ascending: false });
 
@@ -141,7 +157,9 @@
             }
 
             if (!data || data.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="6" class="text-center text-stone-400 py-8 text-sm">No products found.</td></tr>`;
+                tableBody.innerHTML = `
+                    <tr><td colspan="6" class="text-center text-stone-400 py-8 text-sm">No products found. Add your first product above!</td></tr>
+                `;
                 return;
             }
 
@@ -152,14 +170,22 @@
                 const stockText = p.in_stock ? 'In Stock' : 'Out of Stock';
                 html += `
                     <tr class="hover:bg-stone-50 transition">
-                        <td class="px-4 py-3"><img src="${p.image_url}" alt="${p.name}" class="h-10 w-10 object-contain" /></td>
+                        <td class="px-4 py-3">
+                            <img src="${p.image_url}" alt="${p.name}" class="h-10 w-10 object-contain" />
+                        </td>
                         <td class="px-4 py-3 font-medium text-neutral-800">${p.name}</td>
                         <td class="px-4 py-3 text-stone-500 text-xs uppercase">${p.category.replace('-', ' ')}</td>
                         <td class="px-4 py-3 text-sm">${priceDisplay}</td>
-                        <td class="px-4 py-3 text-xs"><i class="fa-solid ${stockIcon} mr-1"></i> ${stockText}</td>
+                        <td class="px-4 py-3 text-xs">
+                            <i class="fa-solid ${stockIcon} mr-1"></i> ${stockText}
+                        </td>
                         <td class="px-4 py-3 text-right space-x-2">
-                            <button onclick="editProduct('${p.id}')" class="text-xs text-stone-600 hover:text-neutral-900 transition"><i class="fa-solid fa-pen"></i></button>
-                            <button onclick="deleteProduct('${p.id}')" class="text-xs text-red-400 hover:text-red-600 transition"><i class="fa-solid fa-trash-can"></i></button>
+                            <button onclick="editProduct('${p.id}')" class="text-xs text-stone-600 hover:text-neutral-900 transition">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                            <button onclick="deleteProduct('${p.id}')" class="text-xs text-red-400 hover:text-red-600 transition">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
                         </td>
                     </tr>
                 `;
@@ -167,9 +193,12 @@
             tableBody.innerHTML = html;
         }
 
-        // Save product
+        // ----------------------------------------------------------------
+        // 4. SAVE (ADD or EDIT)
+        // ----------------------------------------------------------------
         async function saveProduct(event) {
             event.preventDefault();
+
             const id = editId.value;
             const name = pName.value.trim();
             const description = pDesc.value.trim();
@@ -177,17 +206,21 @@
             const category = pCategory.value;
             const inStock = pStock.checked;
 
-            if (!name) { alert('Product name is required.'); return; }
+            if (!name) {
+                alert('Product name is required.');
+                return;
+            }
 
             let imageUrl = existingImageUrl;
             const file = pImage.files[0];
 
             if (file) {
+                // Upload image to Supabase Storage
                 const fileExt = file.name.split('.').pop();
                 const fileName = `${Date.now()}.${fileExt}`;
                 const filePath = `product-images/${fileName}`;
 
-                const { error: uploadError } = await supabase.storage
+                const { error: uploadError } = await supabaseClient.storage
                     .from('product-images')
                     .upload(filePath, file, { cacheControl: '3600', upsert: false });
 
@@ -196,24 +229,39 @@
                     return;
                 }
 
-                const { data: urlData } = supabase.storage
+                const { data: urlData } = supabaseClient.storage
                     .from('product-images')
                     .getPublicUrl(filePath);
                 imageUrl = urlData.publicUrl;
             }
 
+            // For new products, require an image
             if (!imageUrl && !id) {
                 alert('Please select an image for the product.');
                 return;
             }
 
-            const productData = { name, description, price, category, in_stock: inStock, image_url: imageUrl };
+            const productData = {
+                name,
+                description,
+                price,
+                category,
+                in_stock: inStock,
+                image_url: imageUrl,
+            };
 
             let result;
             if (id) {
-                result = await supabase.from('smarttech').update(productData).eq('id', id);
+                // Update
+                result = await supabaseClient
+                    .from('smarttech')
+                    .update(productData)
+                    .eq('id', id);
             } else {
-                result = await supabase.from('smarttech').insert([productData]);
+                // Insert
+                result = await supabaseClient
+                    .from('smarttech')
+                    .insert([productData]);
             }
 
             if (result.error) {
@@ -226,9 +274,11 @@
             loadProducts();
         }
 
-        // Edit
+        // ----------------------------------------------------------------
+        // 5. EDIT – fill form
+        // ----------------------------------------------------------------
         async function editProduct(id) {
-            const { data, error } = await supabase
+            const { data, error } = await supabaseClient
                 .from('smarttech')
                 .select('*')
                 .eq('id', id)
@@ -254,19 +304,29 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Delete
+        // ----------------------------------------------------------------
+        // 6. DELETE
+        // ----------------------------------------------------------------
         async function deleteProduct(id) {
             if (!confirm('Are you sure you want to delete this product?')) return;
-            const { error } = await supabase.from('smarttech').delete().eq('id', id);
+
+            const { error } = await supabaseClient
+                .from('smarttech')
+                .delete()
+                .eq('id', id);
+
             if (error) {
                 alert('Error deleting product: ' + error.message);
                 return;
             }
+
             alert('Product deleted.');
             loadProducts();
         }
 
-        // Reset form
+        // ----------------------------------------------------------------
+        // 7. RESET FORM
+        // ----------------------------------------------------------------
         function resetForm() {
             editId.value = '';
             pName.value = '';
@@ -281,7 +341,9 @@
             formTitle.textContent = 'Add New Product';
         }
 
-        // Image preview
+        // ----------------------------------------------------------------
+        // 8. IMAGE PREVIEW
+        // ----------------------------------------------------------------
         pImage.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
@@ -296,11 +358,13 @@
             }
         });
 
-        // Init
+        // ----------------------------------------------------------------
+        // 9. INIT
+        // ----------------------------------------------------------------
         productForm.addEventListener('submit', saveProduct);
         loadProducts();
 
-        // Expose to global scope for inline onclick
+        // Make functions globally accessible (for inline onclick)
         window.editProduct = editProduct;
         window.deleteProduct = deleteProduct;
         window.resetForm = resetForm;
