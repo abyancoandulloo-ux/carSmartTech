@@ -10,21 +10,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-
-    <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .serif-title {
-            font-family: 'Playfair Display', serif;
-        }
-        ::-webkit-scrollbar {
-            display: none;
-        }
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .serif-title { font-family: 'Playfair Display', serif; }
+        ::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="bg-stone-50 text-neutral-900 tracking-wide selection:bg-neutral-800 selection:text-white antialiased overflow-x-hidden">
@@ -252,22 +242,22 @@
     </footer>
 
     <!-- ================================================================ -->
-    <!-- ====== JAVASCRIPT – SUPABASE + APP LOGIC ====== -->
+    <!-- ====== JAVASCRIPT – CORRECTED (no duplicate supabase) ====== -->
     <!-- ================================================================ -->
     <script>
         // --------------------------------------------------------------
-        // 1. SUPABASE INIT
+        // 1. SUPABASE INIT (unique variable name)
         // --------------------------------------------------------------
         const SUPABASE_URL = 'https://zjfqatxxksjwxfptxouq.supabase.co';
         const SUPABASE_ANON_KEY =
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpqZnFhdHh4a3Nqd3hmcHR4b3VxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5MDY4OTAsImV4cCI6MjA5NjQ4Mjg5MH0.RNuMP2XDBi1N3fz2NiEKgtf-ngC-52OHAiBH9B8umpU';
 
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // --------------------------------------------------------------
         // 2. STATE
         // --------------------------------------------------------------
-        let products = []; // full product list from DB
+        let products = [];
         let cart = [];
 
         // --------------------------------------------------------------
@@ -290,12 +280,12 @@
         const cartCount = document.getElementById('cart-count');
 
         // --------------------------------------------------------------
-        // 4. FETCH PRODUCTS FROM SUPABASE
+        // 4. FETCH PRODUCTS FROM SUPABASE (table: smarttech)
         // --------------------------------------------------------------
         async function fetchProducts() {
             try {
-                const { data, error } = await supabase
-                    .from('SmartTech')
+                const { data, error } = await supabaseClient
+                    .from('smarttech')   // ✅ table name is 'smarttech'
                     .select('*')
                     .order('created_at', { ascending: true });
 
@@ -304,7 +294,6 @@
                 renderAll();
             } catch (err) {
                 console.error('Supabase fetch error:', err);
-                // fallback: show empty state
                 products = [];
                 renderAll();
             }
@@ -320,7 +309,6 @@
             updateCartUI();
         }
 
-        /** Render car-parts category */
         function renderCarParts() {
             const items = products.filter(p => p.category === 'car-parts');
             if (!items.length) {
@@ -331,7 +319,6 @@
             carPartsGrid.innerHTML = items.map(p => productCardHTML(p)).join('');
         }
 
-        /** Render others category */
         function renderOthers() {
             const items = products.filter(p => p.category === 'others');
             if (!items.length) {
@@ -342,7 +329,6 @@
             othersGrid.innerHTML = items.map(p => productCardHTML(p)).join('');
         }
 
-        /** Render promotion (special layout) – takes the first product with category 'promotion' */
         function renderPromotion() {
             const items = products.filter(p => p.category === 'promotion');
             if (!items.length) {
@@ -350,7 +336,6 @@
                     `<p class="text-center text-stone-400 text-sm py-8">No active promotions right now. Check back soon!</p>`;
                 return;
             }
-            // Use the first promotion product for the hero-style layout
             const p = items[0];
             const priceDisplay = (p.price === 0 || p.price === null) ? 'Special Price Options Available' :
                 `Rs ${p.price.toLocaleString()}`;
@@ -382,7 +367,6 @@
             `;
         }
 
-        /** Generate a product card (used for car-parts & others) */
         function productCardHTML(p) {
             const priceDisplay = (p.price === 0 || p.price === null) ? 'Inquire via WhatsApp' : `Rs ${p.price.toLocaleString()}`;
             const inStockText = p.in_stock ? 'In Stock' : 'Out of Stock';
@@ -459,13 +443,10 @@
         function addToCart(id) {
             const p = products.find(prod => prod.id === id);
             if (!p) return;
-
-            // If out of stock, prevent adding
             if (!p.in_stock) {
                 alert('Sorry, this product is currently out of stock.');
                 return;
             }
-
             const existing = cart.find(item => item.id === id);
             if (existing) {
                 existing.quantity += 1;
@@ -473,7 +454,6 @@
                 cart.push({ ...p, quantity: 1 });
             }
             updateCartUI();
-            // Open cart sidebar
             document.getElementById('cart-menu').classList.remove('translate-x-full');
         }
 
@@ -503,7 +483,6 @@
                 itemCount += item.quantity;
                 const sub = (item.price || 0) * item.quantity;
                 netValue += sub;
-
                 const priceStr = (item.price === 0 || item.price === null) ? 'Promo Quote' :
                     `Rs ${item.price.toLocaleString()}`;
 
