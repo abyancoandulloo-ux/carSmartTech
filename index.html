@@ -646,27 +646,33 @@
         // 9. WHATSAPP CHECKOUT
         // --------------------------------------------------------------
         function checkoutViaWhatsApp() {
-            if (cart.length === 0) return;
-            const phone = '23058660270';
-            let msg = 'Hello Zaheer, I am placing an order via Car Smart Tech:\n\n';
-            let grandTotal = 0;
+    if (cart.length === 0) return;
+    const phone = '23058660270';
+    let msg = 'Hello Zaheer, I am placing an order via Car Smart Tech:\n\n';
+    let grandTotal = 0;
 
-            cart.forEach(item => {
-                const sub = (item.price || 0) * item.quantity;
-                grandTotal += sub;
-                const linePrice = (item.price === 0 || item.price === null) ? 'Inquire Price' :
-                    `Rs ${sub.toLocaleString()}`;
-                msg += `▪️ *${item.name}* (Qty: ${item.quantity}) — ${linePrice}\n`;
-            });
-
-            if (grandTotal > 0) {
-                msg += `\n*Total Estimated Order Valuation:* Rs ${grandTotal.toLocaleString()}`;
-            } else {
-                msg += `\n*Total Order Valuation:* Pending Promo Quote Selection`;
-            }
-
-            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+    cart.forEach(item => {
+        const sub = (item.price || 0) * item.quantity;
+        grandTotal += sub;
+        const linePrice = (item.price === 0 || item.price === null) ? 'Inquire Price' :
+            `Rs ${sub.toLocaleString()}`;
+        msg += `▪️ *${item.name}* (Qty: ${item.quantity}) — ${linePrice}`;
+        
+        // Include gift info if present
+        if (item.gift_info && item.gift_info.trim() !== '') {
+            msg += `\n   🎁 + Gift with purchase: ${item.gift_info}`;
         }
+        msg += `\n`;
+    });
+
+    if (grandTotal > 0) {
+        msg += `\n*Total Estimated Order Valuation:* Rs ${grandTotal.toLocaleString()}`;
+    } else {
+        msg += `\n*Total Order Valuation:* Pending Promo Quote Selection`;
+    }
+
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+}
 
         // --------------------------------------------------------------
         // 10. MOBILE MENU
