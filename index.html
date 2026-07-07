@@ -26,6 +26,48 @@
         .promo-card .text-muted {
             color: #9ca3af;
         }
+        .delivery-badge {
+            background: #d4af37;
+            color: #0a0a0a;
+            font-size: 10px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+        }
+        .gift-thumb-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: #d4af37;
+            color: black;
+            font-size: 7px;
+            font-weight: 700;
+            padding: 1px 4px;
+            border-radius: 8px;
+            line-height: 1.2;
+        }
+        .image-thumb-container {
+            position: relative;
+            display: inline-block;
+        }
+        .gift-info-box {
+            background: #fef9e7;
+            border: 1px solid #d4af37;
+            border-radius: 6px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: #1a1a1a;
+        }
+        .gift-info-box i {
+            color: #d4af37;
+            font-size: 18px;
+        }
     </style>
 </head>
 <body class="bg-stone-50 text-neutral-900 tracking-wide selection:bg-neutral-800 selection:text-white antialiased overflow-x-hidden">
@@ -117,9 +159,7 @@
                 <h2 class="serif-title text-2xl md:text-3xl font-light tracking-wide">Seasonal Campaigns</h2>
                 <div class="w-12 h-[1px] bg-neutral-800 mt-2"></div>
             </div>
-            <div id="promotion-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12">
-                <!-- Rendered by JavaScript -->
-            </div>
+            <div id="promotion-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12"></div>
         </section>
 
     </main>
@@ -135,8 +175,13 @@
 
         <div class="flex-grow overflow-y-auto bg-stone-100 md:bg-white">
             <div class="max-w-5xl mx-auto flex flex-col md:flex-row">
-                <div class="w-full md:w-1/2 bg-white p-6 flex items-center justify-center border-b md:border-b-0 md:border-r border-stone-200">
-                    <img id="modal-img" src="" alt="" class="max-h-[35vh] md:max-h-[50vh] w-auto object-contain" />
+                <div class="w-full md:w-1/2 bg-white p-6 flex flex-col items-center border-b md:border-b-0 md:border-r border-stone-200">
+                    <!-- Main image -->
+                    <img id="modal-main-img" src="" alt="" class="max-h-[35vh] md:max-h-[50vh] w-auto object-contain" />
+                    <!-- Thumbnail gallery -->
+                    <div id="modal-thumbnails" class="mt-4 flex gap-2 overflow-x-auto w-full justify-center flex-wrap">
+                        <!-- Rendered by JavaScript -->
+                    </div>
                 </div>
                 <div class="w-full md:w-1/2 p-6 bg-white space-y-6">
                     <div>
@@ -151,13 +196,26 @@
                             <span id="modal-old-price" class="text-sm text-neutral-400 line-through"></span>
                         </div>
                         <p id="modal-stock" class="text-xs font-medium flex items-center gap-1"></p>
-                        <p class="text-xs text-stone-500">Pickup options available on confirmation via WhatsApp checkout network channels.</p>
+                        <!-- Free Delivery Badge -->
+                        <div class="mt-2">
+                            <span class="delivery-badge">
+                                <i class="fa-solid fa-truck"></i> Free Delivery
+                            </span>
+                        </div>
+                        <p class="text-xs text-stone-500 mt-1">Pickup options available on confirmation via WhatsApp checkout network channels.</p>
                     </div>
                     <hr class="border-stone-200" />
                     <div class="space-y-2">
                         <h4 class="text-xs font-bold text-neutral-800 uppercase tracking-wider">Product Overview &amp; Specifications:</h4>
                         <p id="modal-desc" class="text-neutral-600 text-sm font-normal leading-relaxed bg-stone-50 p-4 border border-stone-200/80 rounded"></p>
                     </div>
+
+                    <!-- Gifts with purchase -->
+                    <div id="modal-gift-info" class="gift-info-box hidden">
+                        <i class="fa-solid fa-gift"></i>
+                        <span id="modal-gift-text"></span>
+                    </div>
+
                     <div class="grid grid-cols-2 gap-4 pt-2 text-[11px] text-neutral-500">
                         <div class="flex items-center gap-2"><i class="fa-solid fa-shield-halved text-[#D4AF37]"></i> Verified Authenticity</div>
                         <div class="flex items-center gap-2"><i class="fa-solid fa-truck-fast text-[#D4AF37]"></i> Quick Pickup Channels</div>
@@ -276,12 +334,15 @@
         const promotionGrid = document.getElementById('promotion-grid');
 
         const modal = document.getElementById('product-modal');
-        const modalImg = document.getElementById('modal-img');
+        const modalMainImg = document.getElementById('modal-main-img');
+        const modalThumbnails = document.getElementById('modal-thumbnails');
         const modalTitle = document.getElementById('modal-title');
         const modalPrice = document.getElementById('modal-price');
         const modalOldPrice = document.getElementById('modal-old-price');
         const modalStock = document.getElementById('modal-stock');
         const modalDesc = document.getElementById('modal-desc');
+        const modalGiftInfo = document.getElementById('modal-gift-info');
+        const modalGiftText = document.getElementById('modal-gift-text');
         const modalAddBtn = document.getElementById('modal-add-btn');
 
         const cartItems = document.getElementById('cart-items');
@@ -289,17 +350,33 @@
         const cartCount = document.getElementById('cart-count');
 
         // --------------------------------------------------------------
-        // 4. FETCH PRODUCTS
+        // 4. FETCH PRODUCTS AND IMAGES
         // --------------------------------------------------------------
         async function fetchProducts() {
             try {
-                const { data, error } = await supabaseClient
+                const { data: productsData, error: productsError } = await supabaseClient
                     .from('smarttech')
                     .select('*')
                     .order('created_at', { ascending: true });
 
-                if (error) throw error;
-                products = data || [];
+                if (productsError) throw productsError;
+
+                for (let p of productsData) {
+                    const { data: images, error: imagesError } = await supabaseClient
+                        .from('product_images')
+                        .select('*')
+                        .eq('product_id', p.id)
+                        .order('display_order', { ascending: true });
+
+                    if (imagesError) {
+                        console.warn('Error loading images for product', p.id, imagesError);
+                        p.images = [];
+                    } else {
+                        p.images = images || [];
+                    }
+                }
+
+                products = productsData;
                 renderAll();
             } catch (err) {
                 console.error('Supabase fetch error:', err);
@@ -345,10 +422,12 @@
                     `<p class="col-span-full text-center text-stone-400 text-sm py-8">No active promotions right now. Check back soon!</p>`;
                 return;
             }
-            // Use promo style (black background)
             promotionGrid.innerHTML = items.map(p => productCardHTML(p, true)).join('');
         }
 
+        // --------------------------------------------------------------
+        // 6. PRODUCT CARD HTML
+        // --------------------------------------------------------------
         function productCardHTML(p, isPromo) {
             const priceDisplay = (p.price === 0 || p.price === null) ? 'Inquire' : `Rs ${p.price.toLocaleString()}`;
             const oldPriceDisplay = (p.old_price && p.old_price > 0) ? `Rs ${p.old_price.toLocaleString()}` : '';
@@ -356,17 +435,37 @@
             const stockColor = p.in_stock ? 'text-emerald-600' : 'text-red-500';
             const stockColorPromo = p.in_stock ? 'text-emerald-400' : 'text-red-400';
 
-            // Card styling
             const cardBg = isPromo ? 'bg-neutral-950 border-stone-800 text-white promo-card' : 'bg-white border-stone-200/60 text-neutral-900';
             const hoverBorder = isPromo ? 'hover:border-[#D4AF37]' : 'hover:border-neutral-800';
             const textMuted = isPromo ? 'text-stone-400' : 'text-neutral-500';
             const priceColor = isPromo ? 'text-amber-400' : 'text-neutral-900';
             const stockColorFinal = isPromo ? stockColorPromo : stockColor;
 
+            // Thumbnail gallery (up to 4 images)
+            let thumbnailsHtml = '';
+            const images = p.images || [];
+            const displayImages = images.slice(0, 4);
+            if (displayImages.length > 0) {
+                thumbnailsHtml = `<div class="flex gap-1 mt-2 overflow-x-auto">`;
+                displayImages.forEach(img => {
+                    const isGift = img.is_gift ? `<span class="gift-thumb-badge">GIFT</span>` : '';
+                    thumbnailsHtml += `
+                        <div class="image-thumb-container flex-shrink-0">
+                            <img src="${img.image_url}" class="h-8 w-8 object-cover rounded border border-stone-200" />
+                            ${isGift}
+                        </div>
+                    `;
+                });
+                if (images.length > 4) {
+                    thumbnailsHtml += `<span class="text-[8px] text-stone-400 self-center">+${images.length - 4}</span>`;
+                }
+                thumbnailsHtml += `</div>`;
+            }
+
             return `
                 <div class="group ${cardBg} border overflow-hidden transition-all duration-500 ${hoverBorder} cursor-pointer flex flex-col justify-between" onclick="openDetails('${p.id}')">
                     <div class="overflow-hidden bg-white aspect-square flex items-center justify-center p-4">
-                        <img src="${p.image_url}" alt="${p.name}" class="h-full w-full object-contain transition-all duration-700 ease-out group-hover:scale-105" />
+                        <img src="${p.image_url || (p.images.length ? p.images[0].image_url : 'placeholder.jpg')}" alt="${p.name}" class="h-full w-full object-contain transition-all duration-700 ease-out group-hover:scale-105" />
                     </div>
                     <div class="p-6 md:p-8 flex-grow space-y-2 border-t border-stone-100">
                         <h3 class="font-medium text-base md:text-lg tracking-wide ${isPromo ? 'text-white' : 'text-neutral-800'}">${p.name}</h3>
@@ -375,6 +474,7 @@
                             ${oldPriceDisplay ? `<span class="text-sm ${isPromo ? 'text-stone-500' : 'text-neutral-400'} line-through">${oldPriceDisplay}</span>` : ''}
                         </div>
                         <p class="${textMuted} text-xs font-light leading-relaxed line-clamp-2">${p.description}</p>
+                        ${thumbnailsHtml}
                         <div class="flex items-center gap-2 text-[10px] font-medium">
                             <span class="${stockColorFinal} flex items-center gap-1">
                                 <i class="fa-solid fa-circle text-[5px]"></i> ${inStockText}
@@ -391,7 +491,7 @@
         }
 
         // --------------------------------------------------------------
-        // 6. MODAL
+        // 7. MODAL
         // --------------------------------------------------------------
         let currentModalProductId = null;
 
@@ -400,14 +500,34 @@
             if (!p) return;
             currentModalProductId = id;
 
-            modalImg.src = p.image_url;
-            modalImg.alt = p.name;
+            // Main image
+            const mainImageUrl = p.image_url || (p.images.length ? p.images[0].image_url : 'placeholder.jpg');
+            modalMainImg.src = mainImageUrl;
+            modalMainImg.alt = p.name;
+
+            // Thumbnails
+            modalThumbnails.innerHTML = '';
+            if (p.images && p.images.length > 0) {
+                p.images.forEach(img => {
+                    const isGift = img.is_gift ? `<span class="gift-thumb-badge">GIFT</span>` : '';
+                    const thumb = document.createElement('div');
+                    thumb.className = 'image-thumb-container flex-shrink-0 cursor-pointer border border-stone-200 rounded overflow-hidden hover:border-[#D4AF37]';
+                    thumb.innerHTML = `
+                        <img src="${img.image_url}" class="h-12 w-12 object-cover" onclick="document.getElementById('modal-main-img').src='${img.image_url}'" />
+                        ${isGift}
+                    `;
+                    modalThumbnails.appendChild(thumb);
+                });
+            } else {
+                modalThumbnails.innerHTML = `<span class="text-xs text-stone-400">No additional images</span>`;
+            }
+
             modalTitle.innerText = p.name;
 
+            // Price
             const priceDisplay = (p.price === 0 || p.price === null) ? 'Inquire via WhatsApp' : `Rs ${p.price.toLocaleString()}`;
             modalPrice.innerText = priceDisplay;
 
-            // Old price
             if (p.old_price && p.old_price > 0) {
                 modalOldPrice.innerText = `Rs ${p.old_price.toLocaleString()}`;
                 modalOldPrice.style.display = 'inline';
@@ -415,13 +535,24 @@
                 modalOldPrice.style.display = 'none';
             }
 
+            // Stock
             const stockText = p.in_stock ? '✅ In Stock & Ready to Dispatch' : '❌ Out of Stock';
             const stockColor = p.in_stock ? 'text-emerald-700' : 'text-red-600';
             modalStock.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${stockText}`;
             modalStock.className = `text-xs font-medium flex items-center gap-1 ${stockColor}`;
 
+            // Description
             modalDesc.innerText = p.description;
 
+            // Gift info
+            if (p.gift_info && p.gift_info.trim() !== '') {
+                modalGiftText.innerText = p.gift_info;
+                modalGiftInfo.classList.remove('hidden');
+            } else {
+                modalGiftInfo.classList.add('hidden');
+            }
+
+            // Add to cart
             modalAddBtn.onclick = function() {
                 addToCart(p.id);
                 closeDetails();
@@ -440,7 +571,7 @@
         }
 
         // --------------------------------------------------------------
-        // 7. CART
+        // 8. CART
         // --------------------------------------------------------------
         function addToCart(id) {
             const p = products.find(prod => prod.id === id);
@@ -453,7 +584,8 @@
             if (existing) {
                 existing.quantity += 1;
             } else {
-                cart.push({ ...p, quantity: 1 });
+                const cartImage = p.image_url || (p.images.length ? p.images[0].image_url : 'placeholder.jpg');
+                cart.push({ ...p, quantity: 1, image_url: cartImage });
             }
             updateCartUI();
             document.getElementById('cart-menu').classList.remove('translate-x-full');
@@ -511,7 +643,7 @@
         }
 
         // --------------------------------------------------------------
-        // 8. WHATSAPP CHECKOUT
+        // 9. WHATSAPP CHECKOUT
         // --------------------------------------------------------------
         function checkoutViaWhatsApp() {
             if (cart.length === 0) return;
@@ -537,7 +669,7 @@
         }
 
         // --------------------------------------------------------------
-        // 9. MOBILE MENU
+        // 10. MOBILE MENU
         // --------------------------------------------------------------
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
@@ -554,7 +686,7 @@
         }
 
         // --------------------------------------------------------------
-        // 10. INIT
+        // 11. INIT
         // --------------------------------------------------------------
         fetchProducts();
 
