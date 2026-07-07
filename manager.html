@@ -12,8 +12,52 @@
     <style>
         body { font-family: 'Inter', sans-serif; background: #f5f5f0; }
         .serif-title { font-family: 'Playfair Display', serif; }
-        .image-thumb { width: 80px; height: 80px; object-fit: contain; border: 1px solid #e5e7eb; padding: 4px; background: white; }
-        .gift-badge { background: #d4af37; color: black; font-size: 9px; padding: 2px 6px; border-radius: 10px; }
+        .image-thumb { 
+            width: 100px; 
+            height: 100px; 
+            object-fit: contain; 
+            border: 2px solid #e5e7eb; 
+            padding: 4px; 
+            background: white; 
+            transition: border-color 0.2s;
+        }
+        .image-thumb:hover {
+            border-color: #d4af37;
+        }
+        .image-thumb.main-thumb {
+            border-color: #d4af37;
+            border-width: 3px;
+            box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.3);
+        }
+        .gift-badge { 
+            background: #d4af37; 
+            color: black; 
+            font-size: 9px; 
+            padding: 2px 6px; 
+            border-radius: 10px; 
+            font-weight: 700;
+        }
+        .main-badge {
+            background: #1a56db;
+            color: white;
+            font-size: 8px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+        .thumb-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .thumb-badges {
+            display: flex;
+            gap: 3px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
@@ -59,7 +103,7 @@
                         <textarea id="p-desc" rows="2" class="w-full border border-stone-200 px-4 py-2.5 text-sm focus:border-neutral-800 focus:outline-none transition"></textarea>
                     </div>
 
-                    <!-- NEW: Gifts with purchase -->
+                    <!-- Gifts with purchase -->
                     <div class="space-y-1 md:col-span-2">
                         <label class="text-[10px] font-medium uppercase tracking-wider text-stone-500">Gifts with Purchase <span class="text-stone-400">(e.g., "Free keychain, USB cable")</span></label>
                         <textarea id="p-giftinfo" rows="2" class="w-full border border-stone-200 px-4 py-2.5 text-sm focus:border-neutral-800 focus:outline-none transition"></textarea>
@@ -71,7 +115,6 @@
                             <option value="car-parts">Car Parts</option>
                             <option value="others">Others</option>
                             <option value="promotion">Promotion</option>
-                            <!-- gift category removed – we use gift_info instead -->
                         </select>
                     </div>
 
@@ -87,16 +130,16 @@
                         <label class="text-[10px] font-medium uppercase tracking-wider text-stone-500">Product Images</label>
                         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                             <input type="file" id="p-images" accept="image/*" multiple class="text-sm text-stone-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-xs file:font-medium file:bg-stone-100 file:text-neutral-800 hover:file:bg-stone-200 transition" />
-                            <span class="text-xs text-stone-400 italic">Select multiple images (hold Ctrl/Cmd)</span>
+                            <span class="text-xs text-stone-400 italic">Select multiple images (hold Ctrl/Cmd) – first becomes thumbnail</span>
                         </div>
 
                         <!-- Existing images list -->
-                        <div id="image-list" class="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <div id="image-list" class="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-4">
                             <!-- Rendered by JavaScript -->
                         </div>
 
                         <!-- Preview for newly selected images -->
-                        <div id="new-image-previews" class="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <div id="new-image-previews" class="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-4">
                             <!-- Rendered by JavaScript -->
                         </div>
                     </div>
@@ -119,7 +162,7 @@
                     <table class="w-full text-sm">
                         <thead class="bg-stone-50 border-b border-stone-200">
                             <tr class="text-left text-[10px] font-medium uppercase tracking-wider text-stone-500">
-                                <th class="px-4 py-3">Image</th>
+                                <th class="px-4 py-3">Main Image</th>
                                 <th class="px-4 py-3">Name</th>
                                 <th class="px-4 py-3">Category</th>
                                 <th class="px-4 py-3">Price</th>
@@ -162,8 +205,9 @@
         const imageList = document.getElementById('image-list');
         const newImagePreviews = document.getElementById('new-image-previews');
 
-        let existingImages = [];
-        let newImageFiles = [];
+        let existingImages = []; // array of { id, image_url, is_gift, display_order }
+        let newImageFiles = []; // array of { file, previewUrl, is_gift }
+        let currentProductId = null; // used when editing
 
         // Load products
         async function loadProducts() {
@@ -231,23 +275,35 @@
             return data || [];
         }
 
-        // Render existing images
+        // Render existing images – mark first as MAIN
         function renderImageList(images) {
             if (!images || images.length === 0) {
                 imageList.innerHTML = `<p class="text-stone-400 text-xs col-span-full">No images uploaded yet.</p>`;
                 return;
             }
+
             let html = '';
-            images.forEach(img => {
-                const giftLabel = img.is_gift ? '<span class="gift-badge ml-1">GIFT</span>' : '';
+            images.forEach((img, index) => {
+                const isMain = index === 0;
+                const mainClass = isMain ? 'main-thumb' : '';
+                const mainBadge = isMain ? '<span class="main-badge">MAIN</span>' : '';
+                const giftBadge = img.is_gift ? '<span class="gift-badge">GIFT</span>' : '';
+
                 html += `
-                    <div class="relative border border-stone-200 p-2 bg-white rounded flex flex-col items-center" data-id="${img.id}">
-                        <img src="${img.image_url}" class="image-thumb" />
-                        <div class="flex items-center gap-2 mt-1 text-[10px]">
+                    <div class="thumb-container relative border border-stone-200 p-2 bg-white rounded" data-id="${img.id}">
+                        <img src="${img.image_url}" class="image-thumb ${mainClass}" />
+                        <div class="thumb-badges">
+                            ${mainBadge}
+                            ${giftBadge}
+                        </div>
+                        <div class="flex items-center gap-2 mt-1 text-[10px] flex-wrap justify-center">
                             <label class="flex items-center gap-1">
                                 <input type="checkbox" class="image-gift-toggle" data-id="${img.id}" ${img.is_gift ? 'checked' : ''} />
                                 Gift
                             </label>
+                            ${!isMain ? `<button type="button" class="text-blue-600 hover:text-blue-800 text-xs" onclick="setMainImage('${img.id}')">
+                                <i class="fa-solid fa-arrow-up"></i> Set Main
+                            </button>` : ''}
                             <button type="button" class="text-red-400 hover:text-red-600" onclick="removeImage('${img.id}')">
                                 <i class="fa-solid fa-trash-can"></i>
                             </button>
@@ -271,6 +327,69 @@
             });
         }
 
+        // Set an image as main (move to display_order 0)
+        async function setMainImage(imageId) {
+            if (!currentProductId) return;
+
+            // 1. Get all images for this product
+            const { data: images, error } = await supabaseClient
+                .from('product_images')
+                .select('*')
+                .eq('product_id', currentProductId)
+                .order('display_order', { ascending: true });
+
+            if (error) {
+                alert('Error loading images: ' + error.message);
+                return;
+            }
+
+            // 2. Find the target image and remove it from its current position
+            const targetIndex = images.findIndex(img => img.id === imageId);
+            if (targetIndex === -1) return;
+
+            const targetImage = images.splice(targetIndex, 1)[0];
+
+            // 3. Reorder: target goes to display_order 0, others shift down
+            const updates = [];
+            images.forEach((img, idx) => {
+                updates.push({
+                    id: img.id,
+                    display_order: idx + 1 // shift down by 1
+                });
+            });
+            // Target goes to 0
+            updates.push({
+                id: targetImage.id,
+                display_order: 0
+            });
+
+            // 4. Update each image in a transaction
+            for (const update of updates) {
+                const { error: updateError } = await supabaseClient
+                    .from('product_images')
+                    .update({ display_order: update.display_order })
+                    .eq('id', update.id);
+                if (updateError) {
+                    alert('Error reordering images: ' + updateError.message);
+                    return;
+                }
+            }
+
+            // 5. Reload images and update main image_url in product
+            existingImages = await loadImages(currentProductId);
+            renderImageList(existingImages);
+
+            // Update the product's image_url to the new main image
+            if (existingImages.length > 0) {
+                const mainImageUrl = existingImages[0].image_url;
+                await supabaseClient
+                    .from('smarttech')
+                    .update({ image_url: mainImageUrl })
+                    .eq('id', currentProductId);
+            }
+            loadProducts(); // refresh table
+        }
+
         // Remove an existing image
         async function removeImage(id) {
             if (!confirm('Remove this image?')) return;
@@ -282,8 +401,35 @@
                 alert('Error deleting image: ' + error.message);
                 return;
             }
+            // Remove from existingImages array
             existingImages = existingImages.filter(img => img.id !== id);
-            renderImageList(existingImages);
+            // Reorder remaining images
+            for (let i = 0; i < existingImages.length; i++) {
+                await supabaseClient
+                    .from('product_images')
+                    .update({ display_order: i })
+                    .eq('id', existingImages[i].id);
+            }
+            // Reload
+            if (currentProductId) {
+                existingImages = await loadImages(currentProductId);
+                renderImageList(existingImages);
+                // Update main image_url
+                if (existingImages.length > 0) {
+                    const mainImageUrl = existingImages[0].image_url;
+                    await supabaseClient
+                        .from('smarttech')
+                        .update({ image_url: mainImageUrl })
+                        .eq('id', currentProductId);
+                } else {
+                    // No images left – set image_url to NULL
+                    await supabaseClient
+                        .from('smarttech')
+                        .update({ image_url: null })
+                        .eq('id', currentProductId);
+                }
+                loadProducts();
+            }
         }
 
         // Handle new image selection
@@ -301,10 +447,15 @@
             // Show previews
             let html = '';
             newImageFiles.forEach((item, index) => {
+                const isFirst = index === 0;
+                const mainBadge = isFirst ? '<span class="main-badge">MAIN</span>' : '';
                 html += `
-                    <div class="relative border border-stone-200 p-2 bg-white rounded flex flex-col items-center" data-index="${index}">
-                        <img src="${item.previewUrl}" class="image-thumb" />
-                        <div class="flex items-center gap-2 mt-1 text-[10px]">
+                    <div class="thumb-container border border-stone-200 p-2 bg-white rounded" data-index="${index}">
+                        <img src="${item.previewUrl}" class="image-thumb ${isFirst ? 'main-thumb' : ''}" />
+                        <div class="thumb-badges">
+                            ${mainBadge}
+                        </div>
+                        <div class="flex items-center gap-2 mt-1 text-[10px] flex-wrap justify-center">
                             <label class="flex items-center gap-1">
                                 <input type="checkbox" class="new-image-gift" data-index="${index}" />
                                 Gift
@@ -408,6 +559,9 @@
                     .getPublicUrl(filePath);
                 const imageUrl = urlData.publicUrl;
 
+                // Calculate display_order: new images go after existing ones
+                const nextOrder = existingImages.length + uploadedUrls.length;
+
                 // Insert into product_images
                 const { error: insertError } = await supabaseClient
                     .from('product_images')
@@ -415,7 +569,7 @@
                         product_id: productId,
                         image_url: imageUrl,
                         is_gift: item.is_gift,
-                        display_order: existingImages.length + uploadedUrls.length
+                        display_order: nextOrder
                     }]);
 
                 if (insertError) {
@@ -425,25 +579,22 @@
                 uploadedUrls.push(imageUrl);
             }
 
-            // Set main image_url
-            const { data: allImages } = await supabaseClient
-                .from('product_images')
-                .select('image_url')
-                .eq('product_id', productId)
-                .order('display_order', { ascending: true })
-                .limit(1);
+            // Reload existing images to get updated display_order
+            const freshImages = await loadImages(productId);
+            existingImages = freshImages;
 
-            let mainImageUrl = null;
-            if (allImages && allImages.length > 0) {
-                mainImageUrl = allImages[0].image_url;
-            } else if (uploadedUrls.length > 0) {
-                mainImageUrl = uploadedUrls[0];
-            }
-
-            if (mainImageUrl) {
+            // Set main image_url: the one with display_order 0
+            const mainImage = existingImages.find(img => img.display_order === 0) || existingImages[0];
+            if (mainImage) {
                 await supabaseClient
                     .from('smarttech')
-                    .update({ image_url: mainImageUrl })
+                    .update({ image_url: mainImage.image_url })
+                    .eq('id', productId);
+            } else if (uploadedUrls.length > 0) {
+                // If no existing images (shouldn't happen), use first uploaded
+                await supabaseClient
+                    .from('smarttech')
+                    .update({ image_url: uploadedUrls[0] })
                     .eq('id', productId);
             }
 
@@ -465,6 +616,7 @@
                 return;
             }
 
+            currentProductId = id;
             editId.value = product.id;
             pName.value = product.name;
             pDesc.value = product.description || '';
@@ -514,6 +666,7 @@
             newImageFiles = [];
             newImagePreviews.innerHTML = '';
             pImages.value = '';
+            currentProductId = null;
         }
 
         // Expose functions globally
@@ -522,6 +675,7 @@
         window.resetForm = resetForm;
         window.removeImage = removeImage;
         window.removeNewImage = removeNewImage;
+        window.setMainImage = setMainImage;
 
         // Gift toggle for new images (delegated)
         document.addEventListener('change', function(e) {
