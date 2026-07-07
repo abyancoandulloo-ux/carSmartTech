@@ -19,7 +19,6 @@
 <body>
 
     <div class="min-h-screen bg-stone-50">
-        <!-- Navbar -->
         <nav class="bg-neutral-950 text-white sticky top-0 z-50 border-b border-neutral-800">
             <div class="container mx-auto px-4 md:px-8 py-4 flex justify-between items-center">
                 <div class="flex items-center gap-3">
@@ -60,13 +59,19 @@
                         <textarea id="p-desc" rows="2" class="w-full border border-stone-200 px-4 py-2.5 text-sm focus:border-neutral-800 focus:outline-none transition"></textarea>
                     </div>
 
+                    <!-- NEW: Gifts with purchase -->
+                    <div class="space-y-1 md:col-span-2">
+                        <label class="text-[10px] font-medium uppercase tracking-wider text-stone-500">Gifts with Purchase <span class="text-stone-400">(e.g., "Free keychain, USB cable")</span></label>
+                        <textarea id="p-giftinfo" rows="2" class="w-full border border-stone-200 px-4 py-2.5 text-sm focus:border-neutral-800 focus:outline-none transition"></textarea>
+                    </div>
+
                     <div class="space-y-1">
                         <label class="text-[10px] font-medium uppercase tracking-wider text-stone-500">Category *</label>
                         <select id="p-category" required class="w-full border border-stone-200 px-4 py-2.5 text-sm focus:border-neutral-800 focus:outline-none transition bg-white">
                             <option value="car-parts">Car Parts</option>
                             <option value="others">Others</option>
                             <option value="promotion">Promotion</option>
-                            <option value="gift">Gift</option>
+                            <!-- gift category removed – we use gift_info instead -->
                         </select>
                     </div>
 
@@ -114,11 +119,12 @@
                     <table class="w-full text-sm">
                         <thead class="bg-stone-50 border-b border-stone-200">
                             <tr class="text-left text-[10px] font-medium uppercase tracking-wider text-stone-500">
-                                <th class="px-4 py-3">Main Image</th>
+                                <th class="px-4 py-3">Image</th>
                                 <th class="px-4 py-3">Name</th>
                                 <th class="px-4 py-3">Category</th>
                                 <th class="px-4 py-3">Price</th>
                                 <th class="px-4 py-3">Old Price</th>
+                                <th class="px-4 py-3">Gift Info</th>
                                 <th class="px-4 py-3">Stock</th>
                                 <th class="px-4 py-3 text-right">Actions</th>
                             </tr>
@@ -149,6 +155,7 @@
         const pDesc = document.getElementById('p-desc');
         const pPrice = document.getElementById('p-price');
         const pOldPrice = document.getElementById('p-oldprice');
+        const pGiftInfo = document.getElementById('p-giftinfo');
         const pCategory = document.getElementById('p-category');
         const pStock = document.getElementById('p-stock');
         const pImages = document.getElementById('p-images');
@@ -171,7 +178,7 @@
             }
 
             if (!products || products.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="7" class="text-center text-stone-400 py-8 text-sm">No products found. Add your first product above!</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="8" class="text-center text-stone-400 py-8 text-sm">No products found. Add your first product above!</td></tr>`;
                 return;
             }
 
@@ -185,9 +192,9 @@
                     .limit(1);
 
                 const mainImage = imgs && imgs.length > 0 ? imgs[0].image_url : p.image_url || 'placeholder.jpg';
-
                 const priceDisplay = (p.price === 0 || p.price === null) ? 'Inquire' : `Rs ${p.price.toLocaleString()}`;
                 const oldPriceDisplay = (p.old_price && p.old_price > 0) ? `Rs ${p.old_price.toLocaleString()}` : '-';
+                const giftInfoDisplay = p.gift_info || '-';
                 const stockIcon = p.in_stock ? 'fa-circle-check text-emerald-600' : 'fa-circle-xmark text-red-500';
                 const stockText = p.in_stock ? 'In Stock' : 'Out of Stock';
                 html += `
@@ -197,6 +204,7 @@
                         <td class="px-4 py-3 text-stone-500 text-xs uppercase">${p.category.replace('-', ' ')}</td>
                         <td class="px-4 py-3 text-sm">${priceDisplay}</td>
                         <td class="px-4 py-3 text-sm">${oldPriceDisplay}</td>
+                        <td class="px-4 py-3 text-xs text-stone-600 max-w-[120px] truncate">${giftInfoDisplay}</td>
                         <td class="px-4 py-3 text-xs"><i class="fa-solid ${stockIcon} mr-1"></i> ${stockText}</td>
                         <td class="px-4 py-3 text-right space-x-2">
                             <button onclick="editProduct('${p.id}')" class="text-xs text-stone-600 hover:text-neutral-900 transition"><i class="fa-solid fa-pen"></i></button>
@@ -331,6 +339,7 @@
             const description = pDesc.value.trim();
             const price = parseFloat(pPrice.value) || 0;
             const oldPrice = parseFloat(pOldPrice.value) || 0;
+            const giftInfo = pGiftInfo.value.trim();
             const category = pCategory.value;
             const inStock = pStock.checked;
 
@@ -341,6 +350,7 @@
                 description,
                 price,
                 old_price: oldPrice,
+                gift_info: giftInfo || null,
                 category,
                 in_stock: inStock
                 // image_url will be set later
@@ -460,6 +470,7 @@
             pDesc.value = product.description || '';
             pPrice.value = product.price || 0;
             pOldPrice.value = product.old_price || 0;
+            pGiftInfo.value = product.gift_info || '';
             pCategory.value = product.category;
             pStock.checked = product.in_stock;
             formTitle.textContent = 'Edit Product';
@@ -494,6 +505,7 @@
             pDesc.value = '';
             pPrice.value = '0';
             pOldPrice.value = '0';
+            pGiftInfo.value = '';
             pCategory.value = 'car-parts';
             pStock.checked = true;
             formTitle.textContent = 'Add New Product';
